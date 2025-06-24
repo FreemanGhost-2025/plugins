@@ -14,30 +14,46 @@ function rl_afficher_liste( $atts ) {
     $filtres_config = [
         'test' => [
             [ 'name' => 'avis',                 'placeholder' => 'Avis',                 'type' => 'text'   ],
-            [ 'name' => 'type_de_restauration',   'placeholder' => 'type_de_restauration',   'type' => 'text'   ],
-            [ 'name' => 'populaire_pour', 'placeholder' => 'Populaire pour', 'type' => 'radio'   ],
+            [ 'name' => 'type_de_restauration',   'placeholder' => 'Type de restauration',   'type' => 'text'   ],
             [ 'name' => 'budget_moyen',         'placeholder' => 'Budget moyen',         'type' => 'number' ],
+            [ 'name'     => 'populaire_pour','placeholder' => 'Populaire pour','type'     => 'radio',
+                'options'  => [
+                    'livraison'      => 'Livraison',
+                    'Vente_a_emporter'  => 'Vente à emporter',
+                    'Repas_sur_place'  => 'Repas sur place',
+                ],
+],
+
+            
         ],
     ];
 
     // 3) Affichage du formulaire de filtres
     echo '<form method="GET" class="restaurant-filter">';
-    if ( isset( $filtres_config[ $post_type ] ) ) {
-        foreach ( $filtres_config[ $post_type ] as $f ) {
-            $val   = esc_attr( $_GET[ $f['name'] ] ?? '' );
-            $attrs = '';
-            if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
-            if ( isset( $f['max'] ) ) $attrs .= ' max="'. intval( $f['max'] ) .'"';
+    if ( $f['type'] === 'radio' && ! empty( $f['options'] ) ) {
+    echo '<div class="radio-group">';
+    echo '<span class="radio-label">'. esc_html( $f['placeholder'] ) .'</span>';
+    foreach ( $f['options'] as $opt_value => $opt_label ) {
+        printf(
+          '<label><input type="radio" name="%1$s" value="%2$s"%3$s /> %4$s</label>',
+          esc_attr( $f['name'] ),
+          esc_attr( $opt_value ),
+          checked( $val, $opt_value, false ),
+          esc_html( $opt_label )
+        );
+            }
+            echo '</div>';
+        } else {
             printf(
-                '<input type="%s" name="%s" placeholder="%s" value="%s"%s />',
-                esc_attr( $f['type'] ),
-                esc_attr( $f['name'] ),
-                esc_attr( $f['placeholder'] ),
-                $val,
-                $attrs
+            '<input type="%1$s" name="%2$s" placeholder="%3$s" value="%4$s"%5$s />',
+            esc_attr( $f['type'] ),
+            esc_attr( $f['name'] ),
+            esc_attr( $f['placeholder'] ),
+            $val,
+            $attrs
             );
         }
-    }
+
     echo '<button type="submit">Filtrer</button>';
     echo '</form>';
 
