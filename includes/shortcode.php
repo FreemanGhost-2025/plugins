@@ -1,24 +1,26 @@
 <?php
 /**
  * Shortcode [liste_test_plugins type="test"]
- * Cette fonction remplace désormais rl_afficher_liste_restaurants.
  */
 function rl_afficher_liste( $atts ) {
     // 1) Valeurs par défaut
-    $atts      = shortcode_atts( [ 'type' => 'test' ], $atts, 'liste_test_plugins' );
+    $atts = shortcode_atts( [
+        'type' => 'test',
+    ], $atts, 'liste_test_plugins' );
+
     $post_type = sanitize_key( $atts['type'] );
 
-    // 2) Configuration des filtres
+    // 2) Configuration des filtres par CPT
     $filtres_config = [
         'test' => [
-            [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
-            [ 'name'=>'type_de_restaurant',   'placeholder'=>'Type de restaurant',   'type'=>'text'   ],
-            [ 'name'=>'services_disponibles', 'placeholder'=>'Services disponibles', 'type'=>'text'   ],
-            [ 'name'=>'budget_moyen',         'placeholder'=>'Budget moyen',         'type'=>'number' ],
+            [ 'name' => 'avis',                 'placeholder' => 'Avis',                 'type' => 'text'   ],
+            [ 'name' => 'type_de_restaurant',   'placeholder' => 'Type de restaurant',   'type' => 'text'   ],
+            [ 'name' => 'services_disponibles', 'placeholder' => 'Services disponibles', 'type' => 'text'   ],
+            [ 'name' => 'budget_moyen',         'placeholder' => 'Budget moyen',         'type' => 'number' ],
         ],
     ];
 
-    // 3) Formulaire
+    // 3) Affichage du formulaire de filtres
     echo '<form method="GET" class="restaurant-filter">';
     if ( isset( $filtres_config[ $post_type ] ) ) {
         foreach ( $filtres_config[ $post_type ] as $f ) {
@@ -27,7 +29,7 @@ function rl_afficher_liste( $atts ) {
             if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
             if ( isset( $f['max'] ) ) $attrs .= ' max="'. intval( $f['max'] ) .'"';
             printf(
-                '<input type="%s" name="%s" placeholder="%s" value="%s"%s/>',
+                '<input type="%s" name="%s" placeholder="%s" value="%s"%s />',
                 esc_attr( $f['type'] ),
                 esc_attr( $f['name'] ),
                 esc_attr( $f['placeholder'] ),
@@ -39,7 +41,7 @@ function rl_afficher_liste( $atts ) {
     echo '<button type="submit">Filtrer</button>';
     echo '</form>';
 
-    // 4) meta_query
+    // 4) Construction du meta_query
     $meta_query = [ 'relation' => 'AND' ];
     if ( $post_type === 'test' ) {
         if ( ! empty( $_GET['avis'] ) ) {
@@ -73,7 +75,7 @@ function rl_afficher_liste( $atts ) {
         }
     }
 
-    // 5) requête
+    // 5) Exécution de la requête
     $args = [
         'post_type'      => $post_type,
         'posts_per_page' => -1,
@@ -81,52 +83,60 @@ function rl_afficher_liste( $atts ) {
     if ( count( $meta_query ) > 1 ) {
         $args['meta_query'] = $meta_query;
     }
-    $q = new WP_Query( $args );
 
+    $q = new WP_Query( $args );
     ob_start();
+
     if ( $q->have_posts() ) {
         echo '<div class="liste-restaurants">';
         while ( $q->have_posts() ) {
             $q->the_post();
             $id = get_the_ID();
-            ?>
-            <div class="restaurant-card">
-                <div class="restaurant-left">
-                    <?php
-                    $img = get_field( 'image_restaurant', $id );
-                    if ( $img && is_array( $img ) ) {
-                        printf(
-                            '<img src="%s" class="restaurant-image" alt="%s"/>',
-                            esc_url( $img['url'] ),
-                            esc_attr( get_the_title() )
-                        );
-                    }
-                    ?>
-                    <div class="restaurant-info">
-                        <h3><?php echo esc_html( get_the_title() ); ?></h3>
-                        <?php if ( $post_type === 'test' ) :
-                            $avis = get_field( 'avis', $id );
-                            if ( $avis ) echo '<p>Avis : '. esc_html( $avis ) .'</p>';
-                            // etc.
-                        endif; ?>
-                    </div>
-                </div>
-                <div class="restaurant-divider-vertical"></div>
-                <div class="restaurant-right">
-                    <?php
-                    $link = get_field( 'lien_reservation', $id );
-                    if ( $link ) {
-                        printf(
-                            '<a class="reserve-button" href="%s" target="_blank">Réserver</a>',
-                            esc_url( $link )
-                        );
-                    }
-                    ?>
-                </div>
-            </div>
-            <?php
+
+            echo '<div class="restaurant-card">';
+              echo '<div class="restaurant-left">';
+                $img = get_field( 'image_restaurant', $id );
+                if ( $img && is_array( $img ) ) {
+                    printf(
+                        '<img src="%s" class="restaurant-image" alt="%s"/>',
+                        esc_url( $img['url'] ),
+                        esc_attr( get_the_title() )
+                    );
+                }
+                echo '<div class="restaurant-info">';
+                  printf( '<h3>%s</h3>', esc_html( get_the_title() ) );
+
+                  // Affichage des champs ACF pour le CPT "test"
+                  if ( $post_type === 'test' ) {
+                    $avis   = get_field( 'avis',                 $id );
+                    $typeR  = get_field( 'type_de_restaurant',   $id );
+                    $serv   = get_field( 'services_disponibles', $id );
+                    $budg   = get_field( 'budget_moyen',         $id );
+
+                    if ( $avis )  echo '<p>Avis : '.     esc_html( $avis ).'</p>';
+                    if ( $typeR ) echo '<p>Type : '.     esc_html( $typeR ).'</p>';
+                    if ( $serv )  echo '<p>Services : '. esc_html( $serv ).'</p>';
+                    if ( $budg )  echo '<p>Budget : '.   esc_html( $budg ).' FCFA</p>';
+                  }
+
+                echo '</div>'; // .restaurant-info
+              echo '</div>'; // .restaurant-left
+
+              echo '<div class="restaurant-divider-vertical"></div>';
+
+              echo '<div class="restaurant-right">';
+                $link = get_field( 'lien_reservation', $id );
+                if ( $link ) {
+                    printf(
+                        '<a class="reserve-button" href="%s" target="_blank">Réserver</a>',
+                        esc_url( $link )
+                    );
+                }
+              echo '</div>'; // .restaurant-right
+
+            echo '</div>'; // .restaurant-card
         }
-        echo '</div>';
+        echo '</div>'; // .liste-restaurants
         wp_reset_postdata();
     } else {
         printf(
@@ -137,3 +147,4 @@ function rl_afficher_liste( $atts ) {
 
     return ob_get_clean();
 }
+add_shortcode( 'liste_test_plugins', 'rl_afficher_liste' );
