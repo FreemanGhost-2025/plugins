@@ -17,7 +17,7 @@ function rl_afficher_liste( $atts ) {
             [ 'name' => 'type_de_restauration',   'placeholder' => 'Type de restauration',   'type' => 'text'   ],
             [ 
   'name'     => 'populaire_pour',
-  'placeholder' => 'Populaire pour',
+  'placeholder' => 'Populaire pour :',
   'type'     => 'radio',
   'options'  => [
     'brunch'      => 'Brunch',
