@@ -134,7 +134,7 @@ function rl_afficher_liste( $atts ) {
                 $link = get_field( 'reservation', $id );
                 if ( $link ) {
                     printf(
-                        '<p class="restaurant-price">' . esc_html($budg) . ' FCFA</p>';
+                        
                         '<a class="reserve-button" href="%s" target="_blank">Réserver</a>',
                         esc_url( $link )
                     );
