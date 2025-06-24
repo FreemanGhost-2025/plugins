@@ -95,7 +95,7 @@ function rl_afficher_liste( $atts ) {
 
             echo '<div class="restaurant-card">';
               echo '<div class="restaurant-left">';
-                $img = get_field( 'image_restaurant', $id );
+                $img = get_field( 'images', $id );
                 if ( $img && is_array( $img ) ) {
                     printf(
                         '<img src="%s" class="restaurant-image" alt="%s"/>',
@@ -108,6 +108,7 @@ function rl_afficher_liste( $atts ) {
 
                   // Affichage des champs ACF pour le CPT "test"
                   if ( $post_type === 'test' ) {
+                    
                     $avis   = get_field( 'avis',                 $id );
                     $typeR  = get_field( 'type_de_restaurant',   $id );
                     $serv   = get_field( 'services_disponibles', $id );
@@ -116,6 +117,7 @@ function rl_afficher_liste( $atts ) {
                     $horai   = get_field( 'horaires',         $id );
                     $resa   = get_field( 'reservation',         $id );
 
+                    
                     if ( $avis )  echo '<p>Avis : '.     esc_html( $avis ).'</p>';
                     if ( $typeR ) echo '<p>Type : '.     esc_html( $typeR ).'</p>';
                     if ( $serv )  echo '<p>Services : '. esc_html( $serv ).'</p>';
