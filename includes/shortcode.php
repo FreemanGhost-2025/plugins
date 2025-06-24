@@ -26,28 +26,29 @@ function rl_afficher_liste( $atts ) {
             $name = $f['name'];
             $val  = $_GET[ $name ] ?? '';
 
-            if ( $f['type'] === 'checkbox' ) {
-            $field = get_field_object( $name );
-            if ( ! empty( $field['choices'] ) ) {
-                echo '<div class="filter-field"><span class="filter-label">' 
-                     . esc_html( $f['placeholder'] ) 
-                     . '</span>';
-                $selected = (array) ( $_GET[ $name ] ?? [] );
-                foreach ( $field['choices'] as $value => $label ) {
-                    $checked = in_array( $value, $selected, true ) ? ' checked' : '';
-                    printf(
-                        '<label><input type="%1$s[]" name="%2$s[]" value="%3$s"%4$s> %5$s</label>',
-                        esc_attr( $name ),      // input name[]
-                        esc_attr( $name ),      // input name[]
-                        esc_attr( $value ),
-                        $checked,
-                        esc_html( $label )
-                    );
-                }
-                echo '</div>';
-            }
-            continue;
-        } else {
+   if ( $f['type'] === 'checkbox' ) {
+    $field = get_field_object( $name );
+    if ( ! empty( $field['choices'] ) ) {
+        echo '<div class="filter-field"><span class="filter-label">'
+             . esc_html( $f['placeholder'] )
+             . '</span>';
+        $selected = (array) ( $_GET[ $name ] ?? [] );
+
+        foreach ( $field['choices'] as $value => $label ) {
+            $checked = in_array( $value, $selected, true ) ? ' checked' : '';
+            // <<< ici, on force type="checkbox" et name="populaire_pour[]"
+            printf(
+                '<label><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
+                esc_attr( $name ),      // name="populaire_pour[]"
+                esc_attr( $value ),     // value="brunch", etc.
+                $checked,
+                esc_html( $label )
+            );
+        }
+        echo '</div>';
+    }
+    continue;
+} else {
                 // Champ text ou number
                 $attrs = '';
                 if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
