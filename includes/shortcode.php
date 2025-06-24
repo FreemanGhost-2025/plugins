@@ -110,8 +110,8 @@ function rl_afficher_liste( $atts ) {
                   if ( $post_type === 'test' ) {
                     
                     $avis   = get_field( 'avis',                 $id );
-                    $typeR  = get_field( 'type_de_restaurant',   $id );
-                    $serv   = get_field( 'services_disponibles', $id );
+                    $typeR  = get_field( 'type_de_restauration',   $id );
+                    $serv   = get_field( 'populaire_pour', $id );
                     $budg   = get_field( 'budget_moyen',         $id );
                     $description   = get_field( 'description',         $id );
                     $adres   = get_field( 'adresse',         $id );
