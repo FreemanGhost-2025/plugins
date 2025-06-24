@@ -26,8 +26,19 @@ function rl_afficher_liste( $atts ) {
             $name = $f['name'];
             $val  = $_GET[ $name ] ?? '';
 
-   if ( $f['type'] === 'checkbox' ) {
-    $field = get_field_object( $name );
+if ( $f['type'] === 'checkbox' ) {
+    // on récupère un ID de post 'test' pour charger la config ACF
+    $dummy = get_posts([
+        'post_type'      => $post_type,
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+    ]);
+    if ( ! empty( $dummy ) ) {
+        $field = get_field_object( $name, $dummy[0] );
+    } else {
+        $field = get_field_object( $name );
+    }
+
     if ( ! empty( $field['choices'] ) ) {
         echo '<div class="filter-field"><span class="filter-label">'
              . esc_html( $f['placeholder'] )
@@ -36,13 +47,13 @@ function rl_afficher_liste( $atts ) {
 
         foreach ( $field['choices'] as $value => $label ) {
             $checked = in_array( $value, $selected, true ) ? ' checked' : '';
-            // <<< ici, on force type="checkbox" et name="populaire_pour[]"
+            // type="checkbox", name="populaire_pour[]" et value dynamiques
             printf(
                 '<label><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
-                esc_attr( $name ),      // name="populaire_pour[]"
-                esc_attr( $value ),     // value="brunch", etc.
+                esc_attr( $name ),   // => name="populaire_pour[]"
+                esc_attr( $value ),  // valeur de la choice
                 $checked,
-                esc_html( $label )
+                esc_html( $label )   // label de la choice
             );
         }
         echo '</div>';
