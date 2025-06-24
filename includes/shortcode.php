@@ -119,13 +119,13 @@ function rl_afficher_liste( $atts ) {
                     
 
                     
-                    if ( $avis )  echo '<p>Avis : '.     esc_html( $avis ).'</p>';
-                    if ( $typeR ) echo '<p>Type : '.     esc_html( $typeR ).'</p>';
-                    if ( $serv )  echo '<p>Services : '. esc_html( $serv ).'</p>';
-                    if ( $description )  echo '<p>Description : '.   esc_html( $description ).' </p>';
-                    if ( $budg )  echo '<p>Budget : '.   esc_html( $budg ).' FCFA</p>';
+                    if ( $avis )  echo '<p> '.     esc_html( $avis ).'</p>';
+                    if ( $typeR ) echo '<p> '.     esc_html( $typeR ).'</p>';
+                    if ( $serv )  echo '<p> : '. esc_html( $serv ).'</p>';
+                    if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
+                    
                     if ( $adres )  echo '<p>Adresse : '.   esc_html( $adres ).' </p>';
-                    if ( $horai )  echo '<p>Horaires : '.   esc_html( $horai ).' </p>';
+                   
                     
                   }
 
@@ -135,6 +135,19 @@ function rl_afficher_liste( $atts ) {
               echo '<div class="restaurant-divider-vertical"></div>';
 
               echo '<div class="restaurant-right">';
+
+              // Affiche le budget
+                $budg = get_field('budget_moyen', $id);
+                if ( $budg ) {
+                    echo '<p class="restaurant-budget">Budget : '. esc_html( $budg ) .' FCFA</p>';
+                }
+
+                // Affiche les horaires
+                $horai = get_field('horaires', $id);
+                if ( $horai ) {
+                    echo '<p class="restaurant-horaires">Horaires : '. esc_html( $horai ) .'</p>';
+                }
+
                 $link = get_field( 'reservation', $id );
                 if ( $link ) {
                     printf(
