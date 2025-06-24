@@ -103,17 +103,17 @@ if ( $q->have_posts() ) {
 
             // Champs selon le CPT
            
-            elseif ( $post_type === 'test' ) {
-                $avis       = get_field('avis',                  $id);
-                $typeRest   = get_field('type_de_restaurant',    $id);
-                $services   = get_field('services_disponibles',  $id);
-                $budget     = get_field('budget_moyen',          $id);
+          if ( $post_type === 'test' ) {
+    $avis       = get_field('avis',                  $id);
+    $typeRest   = get_field('type_de_restaurant',    $id);
+    $services   = get_field('services_disponibles',  $id);
+    $budget     = get_field('budget_moyen',          $id);
 
-                if ( $avis )      echo '<p>Avis : '.   esc_html($avis).     '</p>';
-                if ( $typeRest )  echo '<p>Type : '.   esc_html($typeRest). '</p>';
-                if ( $services )  echo '<p>Services : '.esc_html($services).'</p>';
-                if ( $budget )    echo '<p>Budget : '. esc_html($budget).' FCFA</p>';
-            }
+    if ( $avis )      echo '<p>Avis : '.   esc_html($avis).     '</p>';
+    if ( $typeRest )  echo '<p>Type : '.   esc_html($typeRest). '</p>';
+    if ( $services )  echo '<p>Services : '.esc_html($services).'</p>';
+    if ( $budget )    echo '<p>Budget : '. esc_html($budget).' FCFA</p>';
+}
 
           echo '</div>'; // .restaurant-info
         echo '</div>';   // .restaurant-left
