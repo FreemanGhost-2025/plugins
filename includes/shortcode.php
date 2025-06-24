@@ -112,11 +112,17 @@ function rl_afficher_liste( $atts ) {
                     $typeR  = get_field( 'type_de_restaurant',   $id );
                     $serv   = get_field( 'services_disponibles', $id );
                     $budg   = get_field( 'budget_moyen',         $id );
+                    $budg   = get_field( 'adresse',         $id );
+                    $budg   = get_field( 'horaires',         $id );
+                    $budg   = get_field( 'reservation',         $id );
 
                     if ( $avis )  echo '<p>Avis : '.     esc_html( $avis ).'</p>';
                     if ( $typeR ) echo '<p>Type : '.     esc_html( $typeR ).'</p>';
                     if ( $serv )  echo '<p>Services : '. esc_html( $serv ).'</p>';
                     if ( $budg )  echo '<p>Budget : '.   esc_html( $budg ).' FCFA</p>';
+                    if ( $budg )  echo '<p>Adresse : '.   esc_html( $budg ).' </p>';
+                    if ( $budg )  echo '<p>Horaires : '.   esc_html( $budg ).' </p>';
+                    if ( $budg )  echo '<p>Réservation : '.   esc_html( $budg ).' </p>';
                   }
 
                 echo '</div>'; // .restaurant-info
@@ -125,7 +131,7 @@ function rl_afficher_liste( $atts ) {
               echo '<div class="restaurant-divider-vertical"></div>';
 
               echo '<div class="restaurant-right">';
-                $link = get_field( 'lien_reservation', $id );
+                $link = get_field( 'reservation', $id );
                 if ( $link ) {
                     printf(
                         '<a class="reserve-button" href="%s" target="_blank">Réserver</a>',
