@@ -144,7 +144,7 @@ function rl_afficher_liste( $atts ) {
 
                     
                     if ( $avis )  echo '<p>⭐ '.     esc_html( $avis ).'</p>';
-                    if ( $typeR ) echo '<p><i class="fa-solid fa-utensils"></i> '.     esc_html( $typeR ).'</p>';
+                    if ( $typeR ) echo '<p> '.     esc_html( $typeR ).'</p>';
                     if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
                     if ( is_array( $populairePour ) && ! empty( $populairePour ) ) {
                             echo '<p><strong>Populaire pour :</strong> '
