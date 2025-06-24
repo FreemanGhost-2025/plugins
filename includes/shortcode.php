@@ -75,7 +75,12 @@ if ( $f['type'] === 'checkbox' ) {
             }
         }
     }
-    echo '<div class="filter-field"><button type="submit">Filtrer</button></div>';
+    echo '<div class="filter-field">';
+    
+    
+    echo '<button type="submit" class="btn-filter">Filtrer</button>';
+    echo '<a href="' . esc_url( $current_url ) . '" class="btn-clear-filters">Effacer les filtres</a>';
+echo '</div>';
     echo '</form>';
 
     // 4) Construction du meta_query
