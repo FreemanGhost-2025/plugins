@@ -150,7 +150,10 @@ if ( $f['type'] === 'checkbox' ) {
                   $avis = get_field( 'avis', $id );
                   $type = get_field( 'type_de_restauration', $id );
                   $popu = get_field( 'populaire_pour', $id );
+                  $description = get_field( 'description', $id );
                   $budg = get_field( 'budget_moyen', $id );
+
+
                   if ( $avis ) echo '<p>⭐ '. esc_html( $avis ) .'</p>';
                   if ( $type ) echo '<p><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
                    if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
