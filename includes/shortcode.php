@@ -153,6 +153,7 @@ if ( $f['type'] === 'checkbox' ) {
                   $budg = get_field( 'budget_moyen', $id );
                   if ( $avis ) echo '<p>⭐ '. esc_html( $avis ) .'</p>';
                   if ( $type ) echo '<p><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
+                   if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
                   if ( is_array( $popu ) && ! empty( $popu ) ) {
                       echo '<p><strong>Populaire pour :</strong> '. implode( ', ', array_map( 'esc_html', $popu ) ) .'</p>';
                   }
