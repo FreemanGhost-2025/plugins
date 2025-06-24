@@ -15,18 +15,15 @@ function rl_afficher_liste( $atts ) {
         'test' => [
             [ 'name' => 'avis',                 'placeholder' => 'Avis',                 'type' => 'text'   ],
             [ 'name' => 'type_de_restauration',   'placeholder' => 'Type de restauration',   'type' => 'text'   ],
-            [ 
-  'name'     => 'populaire_pour',
-  'placeholder' => 'Populaire pour :',
-  'type'     => 'radio',
-  'options'  => [
-    'brunch'      => 'Brunch',
-    'happy_hour'  => 'Happy Hour',
-    'live_music'  => 'Live Music',
-  ],
+            [ 'name' => 'budget_moyen',         'placeholder' => 'Budget moyen',         'type' => 'number' ],
+            [ 'name'     => 'populaire_pour','placeholder' => 'Populaire pour :','type'     => 'radio','options'  => [
+                'brunch'      => 'Brunch',
+                'happy_hour'  => 'Happy Hour',
+                'live_music'  => 'Live Music',
+            ],
 ],
 
-            [ 'name' => 'budget_moyen',         'placeholder' => 'Budget moyen',         'type' => 'number' ],
+            
         ]
     ];
 
