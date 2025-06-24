@@ -121,7 +121,7 @@ function rl_afficher_liste( $atts ) {
                     
                     if ( $avis )  echo '<p> '.     esc_html( $avis ).'</p>';
                     if ( $typeR ) echo '<p> '.     esc_html( $typeR ).'</p>';
-                    if ( $serv )  echo '<p> : '. esc_html( $serv ).'</p>';
+                    if ( $serv )  echo '<p>  '. esc_html( $serv ).'</p>';
                     if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
                     if ( $adres )  echo '<p>Adresse : '.   esc_html( $adres ).' </p>';
                    
