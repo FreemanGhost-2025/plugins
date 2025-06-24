@@ -15,17 +15,8 @@ function rl_afficher_liste( $atts ) {
             [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
             [ 'name'=>'type_de_restauration', 'placeholder'=>'Type de restauration', 'type'=>'text'   ],
             [ 'name'=>'budget_moyen',         'placeholder'=>'Budget moyen',        'type'=>'number' ],
-            [ 
-              'name'=>'populaire_pour', 
-              'placeholder'=>'Populaire pour',      
-              'type'=>'checkbox',
-              'options'=>[
-                'brunch'     => 'Brunch',
-                'happy_hour' => 'Happy Hour',
-                'live_music' => 'Live Music',
-              ],
-            ],
-        ],
+            [ 'name'=>'populaire_pour', 'placeholder'=>'Populaire pour', 'type'=>'checkbox'],
+        ]
     ];
 
     // 3) Affichage du formulaire de filtres
@@ -35,22 +26,28 @@ function rl_afficher_liste( $atts ) {
             $name = $f['name'];
             $val  = $_GET[ $name ] ?? '';
 
-            if ( $f['type'] === 'checkbox' && ! empty( $f['options'] ) ) {
-                // Checkbox multiple
-                echo '<div class="filter-field"><span class="filter-label">'. esc_html( $f['placeholder'] ) .'</span>';
-                $selected = (array) $val;
-                foreach ( $f['options'] as $opt_val => $opt_label ) {
-                    $checked = in_array( $opt_val, $selected, true ) ? ' checked' : '';
+            if ( $f['type'] === 'checkbox' ) {
+            $field = get_field_object( $name );
+            if ( ! empty( $field['choices'] ) ) {
+                echo '<div class="filter-field"><span class="filter-label">' 
+                     . esc_html( $f['placeholder'] ) 
+                     . '</span>';
+                $selected = (array) ( $_GET[ $name ] ?? [] );
+                foreach ( $field['choices'] as $value => $label ) {
+                    $checked = in_array( $value, $selected, true ) ? ' checked' : '';
                     printf(
-                        '<label><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
-                        esc_attr( $name ),
-                        esc_attr( $opt_val ),
+                        '<label><input type="%1$s[]" name="%2$s[]" value="%3$s"%4$s> %5$s</label>',
+                        esc_attr( $name ),      // input name[]
+                        esc_attr( $name ),      // input name[]
+                        esc_attr( $value ),
                         $checked,
-                        esc_html( $opt_label )
+                        esc_html( $label )
                     );
                 }
                 echo '</div>';
-            } else {
+            }
+            continue;
+        } else {
                 // Champ text ou number
                 $attrs = '';
                 if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
