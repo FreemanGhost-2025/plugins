@@ -3,7 +3,7 @@
 Plugin Name: Listing with Filter
 Plugin URI: https://github.com/FreemanGhost-2025/plugins
 Description: Plugin polyvalent pour lister plusieurs CPT (restaurant, street_food, coffee_shop...) via shortcode dynamique et filtres ACF.
-Version: 1.1.0
+Version: 1.2.0
 Author: Freeman Ghost
 Author URI: https://github.com/FreemanGhost-2025
 License: GPL2
@@ -22,9 +22,8 @@ add_action('wp_enqueue_scripts', 'rl_enqueue_styles');
 // 2. Register all CPTs dynamically
 function rl_register_all_cpts() {
     $types = [
-        'restaurant'   => ['Restaurants','Restaurant','dashicons-store'],
-        'street_food'  => ['Street Food','Street Food','dashicons-carrot'],
-        'coffee_shop'  => ['Coffee Shops','Café','dashicons-coffee'],
+        'tests'   => ['Tests','Test','dashicons-store'],
+        
     ];
     foreach ($types as $slug => $data) {
         list($plural, $singular, $icon) = $data;
