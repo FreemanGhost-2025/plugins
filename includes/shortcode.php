@@ -124,7 +124,7 @@ function rl_afficher_liste( $atts ) {
                     if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
                     if ( $serv )  echo '<p>  '. esc_html( $serv ).'</p>';
                     
-                    if ( $adres )  echo '<p><i class="fa-solid fa-location-dot"> '.   esc_html( $adres ).' </p>';
+                    if ( $adres )  echo '<p><i class="fa-solid fa-location-dot"></i> '.   esc_html( $adres ).' </p>';
                    
                     
                   }
