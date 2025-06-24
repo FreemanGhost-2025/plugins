@@ -112,17 +112,17 @@ function rl_afficher_liste( $atts ) {
                     $typeR  = get_field( 'type_de_restaurant',   $id );
                     $serv   = get_field( 'services_disponibles', $id );
                     $budg   = get_field( 'budget_moyen',         $id );
-                    $budg   = get_field( 'adresse',         $id );
-                    $budg   = get_field( 'horaires',         $id );
-                    $budg   = get_field( 'reservation',         $id );
+                    $adres   = get_field( 'adresse',         $id );
+                    $horai   = get_field( 'horaires',         $id );
+                    $resa   = get_field( 'reservation',         $id );
 
                     if ( $avis )  echo '<p>Avis : '.     esc_html( $avis ).'</p>';
                     if ( $typeR ) echo '<p>Type : '.     esc_html( $typeR ).'</p>';
                     if ( $serv )  echo '<p>Services : '. esc_html( $serv ).'</p>';
                     if ( $budg )  echo '<p>Budget : '.   esc_html( $budg ).' FCFA</p>';
-                    if ( $budg )  echo '<p>Adresse : '.   esc_html( $budg ).' </p>';
-                    if ( $budg )  echo '<p>Horaires : '.   esc_html( $budg ).' </p>';
-                    if ( $budg )  echo '<p>Réservation : '.   esc_html( $budg ).' </p>';
+                    if ( $adres )  echo '<p>Adresse : '.   esc_html( $adres ).' </p>';
+                    if ( $horai )  echo '<p>Horaires : '.   esc_html( $horai ).' </p>';
+                    if ( $bresa )  echo '<p>Réservation : '.   esc_html( $resa ).' </p>';
                   }
 
                 echo '</div>'; // .restaurant-info
@@ -134,6 +134,7 @@ function rl_afficher_liste( $atts ) {
                 $link = get_field( 'reservation', $id );
                 if ( $link ) {
                     printf(
+                        '<p class="restaurant-price">' . esc_html($budg) . ' FCFA</p>';
                         '<a class="reserve-button" href="%s" target="_blank">Réserver</a>',
                         esc_url( $link )
                     );
