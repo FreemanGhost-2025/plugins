@@ -28,7 +28,7 @@ function rl_afficher_liste( $atts ) {
         ]
     ];
 
-    // 3) Affichage du formulaire de filtres
+      // 3) Affichage du formulaire de filtres
     echo '<form method="GET" class="restaurant-filter">';
     if ( isset( $filtres_config[ $post_type ] ) ) {
         foreach ( $filtres_config[ $post_type ] as $f ) {
@@ -36,42 +36,29 @@ function rl_afficher_liste( $atts ) {
             $attrs = '';
             if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
             if ( isset( $f['max'] ) ) $attrs .= ' max="'. intval( $f['max'] ) .'"';
+
             if ( $f['type'] === 'radio' && ! empty( $f['options'] ) ) {
-    echo '<div class="radio-group">';
-    echo '<span class="radio-label">'. esc_html( $f['placeholder'] ) .'</span>';
-foreach ( $filtres_config[ $post_type ] as $f ) {
-    $val = $_GET[ $f['name'] ] ?? [];
-    echo '<div class="filter-field">';
-    if ( $f['type'] === 'checkbox' && ! empty( $f['options'] ) ) {
-        echo '<span class="filter-label">'.esc_html($f['placeholder']).'</span>';
-        foreach ( $f['options'] as $opt_val => $opt_label ) {
-            $checked = ( is_array($val) && in_array($opt_val, $val, true) ) ? ' checked' : '';
-            printf(
-              '<label><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
-              esc_attr( $f['name'] ),
-              esc_attr( $opt_val ),
-              $checked,
-              esc_html( $opt_label )
-            );
-        }
-    } else {
-        // ton input text/number existant
-        printf(
-          '<input type="%1$s" name="%2$s" placeholder="%3$s" value="%4$s" />',
-          esc_attr( $f['type'] ),
-          esc_attr( $f['name'] ),
-          esc_attr( $f['placeholder'] ),
-          esc_attr( is_array($val) ? '' : $val )
-        );
-    }
-    echo '</div>';
-}
+                echo '<div class="radio-group">';
+                echo '<span class="radio-label">'. esc_html( $f['placeholder'] ) .'</span>';
+                foreach ( $f['options'] as $opt_val => $opt_label ) {
+                    $checked = ( (array) ( $_GET[ $f['name'] ] ?? [] ) && in_array( $opt_val, $_GET[ $f['name'] ], true ) ) ? ' checked' : '';
+                    printf(
+                        '<label><input type="radio" name="%1$s" value="%2$s"%3$s> %4$s</label>',
+                        esc_attr( $f['name'] ),
+                        esc_attr( $opt_val ),
+                        $checked,
+                        esc_html( $opt_label )
+                    );
+                }
+                echo '</div>';  // ← fermeture de .radio-group
+            } // ← fermeture de if radio
 
-
-        }
+        } // ← fermeture de foreach $filtres_config
     }
+
     echo '<button type="submit">Filtrer</button>';
     echo '</form>';
+
 
     // 4) Construction du meta_query
     $meta_query = [ 'relation' => 'AND' ];
