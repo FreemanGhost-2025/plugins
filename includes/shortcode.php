@@ -16,12 +16,13 @@ function rl_afficher_liste( $atts ) {
             [ 'name' => 'avis',                 'placeholder' => 'Avis',                 'type' => 'text'   ],
             [ 'name' => 'type_de_restauration',   'placeholder' => 'Type de restauration',   'type' => 'text'   ],
             [ 'name' => 'budget_moyen',         'placeholder' => 'Budget moyen',         'type' => 'number' ],
-            [ 'name'     => 'populaire_pour','placeholder' => 'Populaire pour :','type'     => 'radio','options'  => [
+            [ 'name'     => 'populaire_pour','placeholder' => 'Populaire pour :','type'     => 'checkbox',
+            'options'  => [
                 'brunch'      => 'Brunch',
                 'happy_hour'  => 'Happy Hour',
                 'live_music'  => 'Live Music',
             ],
-],
+        ],
 
             
         ]
@@ -38,25 +39,33 @@ function rl_afficher_liste( $atts ) {
             if ( $f['type'] === 'radio' && ! empty( $f['options'] ) ) {
     echo '<div class="radio-group">';
     echo '<span class="radio-label">'. esc_html( $f['placeholder'] ) .'</span>';
-    foreach ( $f['options'] as $opt_value => $opt_label ) {
+ foreach ( $filtres_config[ $post_type ] as $f ) {
+    $val = $_GET[ $f['name'] ] ?? [];
+    echo '<div class="filter-field">';
+    if ( $f['type'] === 'checkbox' && ! empty( $f['options'] ) ) {
+        echo '<span class="filter-label">'.esc_html($f['placeholder']).'</span>';
+        foreach ( $f['options'] as $opt_val => $opt_label ) {
+            $checked = ( is_array($val) && in_array($opt_val, $val, true) ) ? ' checked' : '';
+            printf(
+              '<label><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
+              esc_attr( $f['name'] ),
+              esc_attr( $opt_val ),
+              $checked,
+              esc_html( $opt_label )
+            );
+        }
+    } else {
+        // ton input text/number existant
         printf(
-          '<label><input type="radio" name="%1$s" value="%2$s"%3$s /> %4$s</label>',
+          '<input type="%1$s" name="%2$s" placeholder="%3$s" value="%4$s" />',
+          esc_attr( $f['type'] ),
           esc_attr( $f['name'] ),
-          esc_attr( $opt_value ),
-          checked( $val, $opt_value, false ),
-          esc_html( $opt_label )
+          esc_attr( $f['placeholder'] ),
+          esc_attr( is_array($val) ? '' : $val )
         );
     }
     echo '</div>';
-} else {
-    printf(
-      '<input type="%1$s" name="%2$s" placeholder="%3$s" value="%4$s"%5$s />',
-      esc_attr( $f['type'] ),
-      esc_attr( $f['name'] ),
-      esc_attr( $f['placeholder'] ),
-      $val,
-      $attrs
-    );
+}
 }
 
         }
@@ -81,13 +90,18 @@ function rl_afficher_liste( $atts ) {
                 'compare' => 'LIKE',
             ];
         }
-        if ( ! empty( $_GET['populaire_pour'] ) ) {
-            $meta_query[] = [
-                'key'     => 'populaire_pour',
-                'value'   => sanitize_text_field( $_GET['populaire_pour'] ),
-                'compare' => '=',
+        if ( ! empty( $_GET['populaire_pour'] ) && is_array( $_GET['populaire_pour'] ) ) {
+        $or = [ 'relation' => 'OR' ];
+        foreach ( $_GET['populaire_pour'] as $v ) {
+            $v = sanitize_text_field( $v );
+            $or[] = [
+              'key'     => 'populaire_pour',
+              'value'   => '"' . $v . '"',
+              'compare' => 'LIKE',
             ];
         }
+        $meta_query[] = $or;
+    }
         if ( ! empty( $_GET['budget_moyen'] ) ) {
             $meta_query[] = [
                 'key'     => 'budget_moyen',
@@ -134,7 +148,7 @@ function rl_afficher_liste( $atts ) {
                     
                     $avis   = get_field( 'avis',                 $id );
                     $typeR  = get_field( 'type_de_restauration',   $id );
-                    $serv   = get_field( 'populaire_pour', $id );
+                    $populairePour = get_field('populaire_pour', $id);
                     $budg   = get_field( 'budget_moyen',         $id );
                     $description   = get_field( 'description',         $id );
                     $adres   = get_field( 'adresse',         $id );
@@ -145,7 +159,11 @@ function rl_afficher_liste( $atts ) {
                     if ( $avis )  echo '<p>⭐ '.     esc_html( $avis ).'</p>';
                     if ( $typeR ) echo '<p><i class="fa-solid fa-utensils"></i> '.     esc_html( $typeR ).'</p>';
                     if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
-                    if ( $serv )  echo '<p>  '. esc_html( $serv ).'</p>';
+                    if ( is_array( $populairePour ) && ! empty( $populairePour ) ) {
+                            echo '<p><strong>Populaire pour :</strong> '
+                            . implode( ', ', array_map( 'esc_html', $populairePour ) )
+                            . '</p>';
+                        }
                     
                     if ( $adres )  echo '<p><i class="fa-solid fa-location-dot"></i> '.   esc_html( $adres ).' </p>';
                    
