@@ -113,6 +113,7 @@ function rl_afficher_liste( $atts ) {
                     $typeR  = get_field( 'type_de_restaurant',   $id );
                     $serv   = get_field( 'services_disponibles', $id );
                     $budg   = get_field( 'budget_moyen',         $id );
+                    $description   = get_field( 'description',         $id );
                     $adres   = get_field( 'adresse',         $id );
                     $horai   = get_field( 'horaires',         $id );
                     
@@ -121,6 +122,7 @@ function rl_afficher_liste( $atts ) {
                     if ( $avis )  echo '<p>Avis : '.     esc_html( $avis ).'</p>';
                     if ( $typeR ) echo '<p>Type : '.     esc_html( $typeR ).'</p>';
                     if ( $serv )  echo '<p>Services : '. esc_html( $serv ).'</p>';
+                    if ( $description )  echo '<p>Description : '.   esc_html( $description ).' </p>';
                     if ( $budg )  echo '<p>Budget : '.   esc_html( $budg ).' FCFA</p>';
                     if ( $adres )  echo '<p>Adresse : '.   esc_html( $adres ).' </p>';
                     if ( $horai )  echo '<p>Horaires : '.   esc_html( $horai ).' </p>';
