@@ -115,7 +115,7 @@ function rl_afficher_liste( $atts ) {
                     $budg   = get_field( 'budget_moyen',         $id );
                     $adres   = get_field( 'adresse',         $id );
                     $horai   = get_field( 'horaires',         $id );
-                    $resa   = get_field( 'reservation',         $id );
+                    
 
                     
                     if ( $avis )  echo '<p>Avis : '.     esc_html( $avis ).'</p>';
@@ -124,7 +124,7 @@ function rl_afficher_liste( $atts ) {
                     if ( $budg )  echo '<p>Budget : '.   esc_html( $budg ).' FCFA</p>';
                     if ( $adres )  echo '<p>Adresse : '.   esc_html( $adres ).' </p>';
                     if ( $horai )  echo '<p>Horaires : '.   esc_html( $horai ).' </p>';
-                    if ( $bresa )  echo '<p>Réservation : '.   esc_html( $resa ).' </p>';
+                    
                   }
 
                 echo '</div>'; // .restaurant-info
