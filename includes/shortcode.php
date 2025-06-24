@@ -7,58 +7,67 @@ function rl_afficher_liste( $atts ) {
     $atts = shortcode_atts( [
         'type' => 'test',
     ], $atts, 'liste_test_plugins' );
-
     $post_type = sanitize_key( $atts['type'] );
 
     // 2) Configuration des filtres par CPT
     $filtres_config = [
         'test' => [
-            [ 'name' => 'avis',                 'placeholder' => 'Avis',                 'type' => 'text'   ],
-            [ 'name' => 'type_de_restauration',   'placeholder' => 'Type de restauration',   'type' => 'text'   ],
-            [ 'name' => 'budget_moyen',         'placeholder' => 'Budget moyen',         'type' => 'number' ],
-            [ 'name'     => 'populaire_pour','placeholder' => 'Populaire pour :','type'     => 'checkbox',
-            'options'  => [
-                'brunch'      => 'Brunch',
-                'happy_hour'  => 'Happy Hour',
-                'live_music'  => 'Live Music',
+            [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
+            [ 'name'=>'type_de_restauration', 'placeholder'=>'Type de restauration', 'type'=>'text'   ],
+            [ 'name'=>'budget_moyen',         'placeholder'=>'Budget moyen',        'type'=>'number' ],
+            [ 
+              'name'=>'populaire_pour', 
+              'placeholder'=>'Populaire pour',      
+              'type'=>'checkbox',
+              'options'=>[
+                'brunch'     => 'Brunch',
+                'happy_hour' => 'Happy Hour',
+                'live_music' => 'Live Music',
+              ],
             ],
         ],
-
-            
-        ]
     ];
 
-      // 3) Affichage du formulaire de filtres
+    // 3) Affichage du formulaire de filtres
     echo '<form method="GET" class="restaurant-filter">';
     if ( isset( $filtres_config[ $post_type ] ) ) {
         foreach ( $filtres_config[ $post_type ] as $f ) {
-            $val   = esc_attr( $_GET[ $f['name'] ] ?? '' );
-            $attrs = '';
-            if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
-            if ( isset( $f['max'] ) ) $attrs .= ' max="'. intval( $f['max'] ) .'"';
+            $name = $f['name'];
+            $val  = $_GET[ $name ] ?? '';
 
-            if ( $f['type'] === 'radio' && ! empty( $f['options'] ) ) {
-                echo '<div class="radio-group">';
-                echo '<span class="radio-label">'. esc_html( $f['placeholder'] ) .'</span>';
+            if ( $f['type'] === 'checkbox' && ! empty( $f['options'] ) ) {
+                // Checkbox multiple
+                echo '<div class="filter-field"><span class="filter-label">'. esc_html( $f['placeholder'] ) .'</span>';
+                $selected = (array) $val;
                 foreach ( $f['options'] as $opt_val => $opt_label ) {
-                    $checked = ( (array) ( $_GET[ $f['name'] ] ?? [] ) && in_array( $opt_val, $_GET[ $f['name'] ], true ) ) ? ' checked' : '';
+                    $checked = in_array( $opt_val, $selected, true ) ? ' checked' : '';
                     printf(
-                        '<label><input type="radio" name="%1$s" value="%2$s"%3$s> %4$s</label>',
-                        esc_attr( $f['name'] ),
+                        '<label><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
+                        esc_attr( $name ),
                         esc_attr( $opt_val ),
                         $checked,
                         esc_html( $opt_label )
                     );
                 }
-                echo '</div>';  // ← fermeture de .radio-group
-            } // ← fermeture de if radio
-
-        } // ← fermeture de foreach $filtres_config
+                echo '</div>';
+            } else {
+                // Champ text ou number
+                $attrs = '';
+                if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
+                if ( isset( $f['max'] ) ) $attrs .= ' max="'. intval( $f['max'] ) .'"';
+                printf(
+                    '<div class="filter-field"><input type="%s" name="%s" placeholder="%s" value="%s"%s /></div>',
+                    esc_attr( $f['type'] ),
+                    esc_attr( $name ),
+                    esc_attr( $f['placeholder'] ),
+                    esc_attr( $val ),
+                    $attrs
+                );
+            }
+        }
     }
-
-    echo '<button type="submit">Filtrer</button>';
+    echo '<div class="filter-field"><button type="submit">Filtrer</button></div>';
     echo '</form>';
-
 
     // 4) Construction du meta_query
     $meta_query = [ 'relation' => 'AND' ];
@@ -78,17 +87,16 @@ function rl_afficher_liste( $atts ) {
             ];
         }
         if ( ! empty( $_GET['populaire_pour'] ) && is_array( $_GET['populaire_pour'] ) ) {
-        $or = [ 'relation' => 'OR' ];
-        foreach ( $_GET['populaire_pour'] as $v ) {
-            $v = sanitize_text_field( $v );
-            $or[] = [
-              'key'     => 'populaire_pour',
-              'value'   => '"' . $v . '"',
-              'compare' => 'LIKE',
-            ];
+            $or = [ 'relation' => 'OR' ];
+            foreach ( $_GET['populaire_pour'] as $v ) {
+                $or[] = [
+                    'key'     => 'populaire_pour',
+                    'value'   => '"' . sanitize_text_field( $v ) . '"',
+                    'compare' => 'LIKE',
+                ];
+            }
+            $meta_query[] = $or;
         }
-        $meta_query[] = $or;
-    }
         if ( ! empty( $_GET['budget_moyen'] ) ) {
             $meta_query[] = [
                 'key'     => 'budget_moyen',
@@ -110,7 +118,6 @@ function rl_afficher_liste( $atts ) {
 
     $q = new WP_Query( $args );
     ob_start();
-
     if ( $q->have_posts() ) {
         echo '<div class="liste-restaurants">';
         while ( $q->have_posts() ) {
@@ -118,6 +125,7 @@ function rl_afficher_liste( $atts ) {
             $id = get_the_ID();
 
             echo '<div class="restaurant-card">';
+              // Bloc gauche
               echo '<div class="restaurant-left">';
                 $img = get_field( 'images', $id );
                 if ( $img && is_array( $img ) ) {
@@ -129,66 +137,37 @@ function rl_afficher_liste( $atts ) {
                 }
                 echo '<div class="restaurant-info">';
                   printf( '<h3>%s</h3>', esc_html( get_the_title() ) );
-
-                  // Affichage des champs ACF pour le CPT "test"
-                  if ( $post_type === 'test' ) {
-                    
-                    $avis   = get_field( 'avis',                 $id );
-                    $typeR  = get_field( 'type_de_restauration',   $id );
-                    $populairePour = get_field('populaire_pour', $id);
-                    $budg   = get_field( 'budget_moyen',         $id );
-                    $description   = get_field( 'description',         $id );
-                    $adres   = get_field( 'adresse',         $id );
-                    $horai   = get_field( 'horaires',         $id );
-                    
-
-                    
-                    if ( $avis )  echo '<p>⭐ '.     esc_html( $avis ).'</p>';
-                    if ( $typeR ) echo '<p> '.     esc_html( $typeR ).'</p>';
-                    if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
-                    if ( is_array( $populairePour ) && ! empty( $populairePour ) ) {
-                            echo '<p><strong>Populaire pour :</strong> '
-                            . implode( ', ', array_map( 'esc_html', $populairePour ) )
-                            . '</p>';
-                        }
-                    
-                    if ( $adres )  echo '<p><i class="fa-solid fa-location-dot"></i> '.   esc_html( $adres ).' </p>';
-                   
-                    
+                  // Champs ACF “test”
+                  $avis = get_field( 'avis', $id );
+                  $type = get_field( 'type_de_restauration', $id );
+                  $popu = get_field( 'populaire_pour', $id );
+                  $budg = get_field( 'budget_moyen', $id );
+                  if ( $avis ) echo '<p>⭐ '. esc_html( $avis ) .'</p>';
+                  if ( $type ) echo '<p><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
+                  if ( is_array( $popu ) && ! empty( $popu ) ) {
+                      echo '<p><strong>Populaire pour :</strong> '. implode( ', ', array_map( 'esc_html', $popu ) ) .'</p>';
                   }
+                  if ( $budg ) echo '<p>Budget : '. esc_html( $budg ) .' FCFA</p>';
+                echo '</div>';
+              echo '</div>';
 
-                echo '</div>'; // .restaurant-info
-              echo '</div>'; // .restaurant-left
-
+              // Séparateur
               echo '<div class="restaurant-divider-vertical"></div>';
 
+              // Bloc droite
               echo '<div class="restaurant-right">';
-
-              // Affiche le budget
-                $budg = get_field('budget_moyen', $id);
-                if ( $budg ) {
-                    echo '<p class="restaurant-budget">Budget : '. esc_html( $budg ) .' FCFA</p>';
-                }
-
-                // Affiche les horaires
-                $horai = get_field('horaires', $id);
-                if ( $horai ) {
-                    echo '<p class="restaurant-horaires">Horaires : '. esc_html( $horai ) .'</p>';
-                }
-
                 $link = get_field( 'reservation', $id );
                 if ( $link ) {
                     printf(
-                        
                         '<a class="reserve-button" href="%s" target="_blank">Réserver</a>',
                         esc_url( $link )
                     );
                 }
-              echo '</div>'; // .restaurant-right
+              echo '</div>';
 
-            echo '</div>'; // .restaurant-card
+            echo '</div>';
         }
-        echo '</div>'; // .liste-restaurants
+        echo '</div>';
         wp_reset_postdata();
     } else {
         printf(
@@ -196,7 +175,6 @@ function rl_afficher_liste( $atts ) {
             esc_html( $post_type )
         );
     }
-
     return ob_get_clean();
 }
 add_shortcode( 'liste_test_plugins', 'rl_afficher_liste' );
