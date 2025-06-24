@@ -4,7 +4,7 @@
  */
 function rl_afficher_liste($atts) {
     $atts = shortcode_atts([
-        'type' => 'tests',
+        'type' => 'test',
     ], $atts, 'liste_test_plugins');
     $post_type = sanitize_key($atts['type']);
 

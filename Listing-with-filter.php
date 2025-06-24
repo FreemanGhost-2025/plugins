@@ -14,16 +14,9 @@ GitHub Branch: main
 */
 
 // 1. Enqueue styles
-function rl_enqueue_styles() {
-    wp_enqueue_style('restaurant-listing-style-filter', plugin_dir_url(__FILE__) . 'assets/style.css');
-}
-add_action('wp_enqueue_scripts', 'rl_enqueue_styles');
-
-// 2. Register all CPTs dynamically
-function rl_register_all_cpts() {
+unction rl_register_all_cpts() {
     $types = [
-        'tests'   => ['Tests','Test','dashicons-store'],
-        
+        'test'  => ['Tests','Test','dashicons-store'],
     ];
     foreach ($types as $slug => $data) {
         list($plural, $singular, $icon) = $data;
@@ -37,15 +30,15 @@ function rl_register_all_cpts() {
             'has_archive'   => true,
             'rewrite'       => ['slug' => $slug],
             'show_in_rest'  => true,
-            'supports'      => ['title', 'editor', 'thumbnail'],
+            'supports'      => ['title','editor','thumbnail'],
             'menu_position' => 5,
             'menu_icon'     => $icon,
-            'taxonomies'    => ['category'],
+            'taxonomies'    => ['category'],   // ← on active les catégories
         ]);
         register_taxonomy_for_object_type('category', $slug);
     }
 }
-add_action('init', 'rl_register_all_cpts');
+add_action('init','rl_register_all_cpts');
 
 // 3. Include shortcode logic
 require_once plugin_dir_path(__FILE__) . 'includes/shortcode.php';
