@@ -4,7 +4,7 @@
  */
 function rl_afficher_liste($atts) {
     $atts = shortcode_atts([
-        'type' => 'test',
+        'type' => 'tests',
     ], $atts, 'liste_test_plugins');
     $post_type = sanitize_key($atts['type']);
 
@@ -103,7 +103,7 @@ if ( $q->have_posts() ) {
 
             // Champs selon le CPT
            
-          if ( $post_type === 'test' ) {
+          if ( $post_type === 'tests' ) {
     $avis       = get_field('avis',                  $id);
     $typeRest   = get_field('type_de_restaurant',    $id);
     $services   = get_field('services_disponibles',  $id);
