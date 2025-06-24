@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Restaurant Listing with Filter
+Plugin Name: Listing with Filter
 Plugin URI: https://github.com/FreemanGhost-2025/plugins
 Description: Plugin polyvalent pour lister plusieurs CPT (restaurant, street_food, coffee_shop...) via shortcode dynamique et filtres ACF.
 Version: 1.1.0
