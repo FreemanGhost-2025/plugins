@@ -14,8 +14,8 @@ function rl_afficher_liste( $atts ) {
     $filtres_config = [
         'test' => [
             [ 'name' => 'avis',                 'placeholder' => 'Avis',                 'type' => 'text'   ],
-            [ 'name' => 'type_de_restaurant',   'placeholder' => 'Type de restaurant',   'type' => 'text'   ],
-            [ 'name' => 'services_disponibles', 'placeholder' => 'Services disponibles', 'type' => 'text'   ],
+            [ 'name' => 'type_de_restauration',   'placeholder' => 'type_de_restauration',   'type' => 'text'   ],
+            [ 'name' => 'populaire_pour', 'placeholder' => 'Populaire pour', 'type' => 'radio'   ],
             [ 'name' => 'budget_moyen',         'placeholder' => 'Budget moyen',         'type' => 'number' ],
         ],
     ];
@@ -51,18 +51,18 @@ function rl_afficher_liste( $atts ) {
                 'compare' => 'LIKE',
             ];
         }
-        if ( ! empty( $_GET['type_de_restaurant'] ) ) {
+        if ( ! empty( $_GET['type_de_restauration'] ) ) {
             $meta_query[] = [
-                'key'     => 'type_de_restaurant',
-                'value'   => sanitize_text_field( $_GET['type_de_restaurant'] ),
+                'key'     => 'type_de_restauration',
+                'value'   => sanitize_text_field( $_GET['type_de_restauration'] ),
                 'compare' => 'LIKE',
             ];
         }
-        if ( ! empty( $_GET['services_disponibles'] ) ) {
+        if ( ! empty( $_GET['populaire_pour'] ) ) {
             $meta_query[] = [
-                'key'     => 'services_disponibles',
-                'value'   => sanitize_text_field( $_GET['services_disponibles'] ),
-                'compare' => 'LIKE',
+                'key'     => 'populaire_pour',
+                'value'   => sanitize_text_field( $_GET['populaire_pour'] ),
+                'compare' => '=',
             ];
         }
         if ( ! empty( $_GET['budget_moyen'] ) ) {
