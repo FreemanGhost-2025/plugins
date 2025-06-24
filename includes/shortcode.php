@@ -39,7 +39,7 @@ function rl_afficher_liste( $atts ) {
             if ( $f['type'] === 'radio' && ! empty( $f['options'] ) ) {
     echo '<div class="radio-group">';
     echo '<span class="radio-label">'. esc_html( $f['placeholder'] ) .'</span>';
- foreach ( $filtres_config[ $post_type ] as $f ) {
+foreach ( $filtres_config[ $post_type ] as $f ) {
     $val = $_GET[ $f['name'] ] ?? [];
     echo '<div class="filter-field">';
     if ( $f['type'] === 'checkbox' && ! empty( $f['options'] ) ) {
@@ -66,7 +66,7 @@ function rl_afficher_liste( $atts ) {
     }
     echo '</div>';
 }
-}
+
 
         }
     }
