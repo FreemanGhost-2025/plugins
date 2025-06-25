@@ -142,9 +142,9 @@
   margin: 8px;
 }
 
-.restaurant-type p {
-   background-color: #ebebeb;
-  color: #434141;
+.restaurant-type  {
+   background-color: #000000;
+  color: #ffffff;
 }
 
 .restaurant-divider-vertical {
