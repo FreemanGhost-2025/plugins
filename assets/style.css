@@ -1,40 +1,94 @@
-/* Styles du plugin avec filtre */
+/* Styles du plugin pour liste de restaurants */
+
+/* Filtre */
 .restaurant-filter {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
   flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+  align-items: flex-end;
 }
-.restaurant-filter input,
-.restaurant-filter button {
-  padding: 10px 10px;
+.filter-field {
+  display: flex;
+  flex-direction: column;
+}
+.filter-label {
   font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
 }
+.filter-label.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+.restaurant-filter input[type="text"],
+.restaurant-filter input[type="number"] {
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+}
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+}
+.restaurant-filter .btn-filter,
+.restaurant-filter .btn-clear-filters {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-filter {
+  background-color: #1a855d;
+  color: #fff;
+}
+.btn-clear-filters {
+  background-color: transparent;
+  color: #1a855d;
+  border: 1px solid #1a855d;
+}
+
+/* Liste des restaurants */
 .liste-restaurants {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 .restaurant-card {
   display: flex;
-  justify-content: space-between;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
   flex-wrap: wrap;
 }
 .restaurant-left {
   display: flex;
-  gap:25px;
   flex: 1;
-  min-width: 250px;
+  gap: 16px;
+  padding: 16px;
+  min-width: 240px;
 }
 .restaurant-image {
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 6px;
   flex-shrink: 0;
 }
 .restaurant-info {
@@ -42,225 +96,88 @@
   flex-direction: column;
   justify-content: center;
   flex: 1;
+  gap: 8px;
 }
 .restaurant-title {
-  margin: 0;
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
 }
+.restaurant-etoiles,
 .restaurant-type,
-.restaurant-adresse,
 .restaurant-description,
-.restaurant-telephone,
-.restaurant-etoiles {
+.restaurant-price {
   font-size: 14px;
   color: #555;
   margin: 4px 0;
 }
-
-
-.filter-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
+.restaurant-type i {
+  margin-right: 6px;
 }
-
-
-.restaurant-right {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  
-  min-width: 150px;
-  gap: 10px;
-}
-.restaurant-price {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0;
-}
-.price-label {
-  font-size: 12px;
-  color: #888;
-}
-.reserve-button {
-  background-color: #1A855D;
-  color: white;
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-size: 14px;
-  display: inline-block;
-}
-
-
-.restaurant-contact-note {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  margin-top: 6px;
-  flex-wrap: wrap;
-}
-
-.restaurant-contact-note .restaurant-telephone,
-.restaurant-contact-note .restaurant-etoiles {
-  font-size: 14px;
-  color: #555;
-}
-
-
-
-
 
 .restaurant-divider-vertical {
   width: 1px;
-  background-color: #ccc;
-  margin: 0 20px;
-}
-
-.restaurant-contact-note .restaurant-telephone {
-  background-color: #000;
-  color: white;
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-}
-
-
-
-
-
-.btn-clear-filters {
-  padding: 18px;
-  font-size: 14px;
-  background-color: #1A855D; /* ← modifie cette couleur */
-  color: white;              /* couleur du texte */
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-	 margin: 5px;
-}
-
-.filter-label{
-    margin: 5px;
-	font-size: 15px;
-	font-weight: bold;
-	display: block;
-	text-transform :uppercase
-	
-}
-
-
-form label{
-	margin: 0px;
-	 font-size: 10px;
- display: inline-block;
-	}
-
-
-form input[type=checkbox]{
-	margin: 8px;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@media (max-width: 768px) {
-.restaurant-card {
-flex-direction: column;
-align-items: stretch;
-text-align: left;
-}
-
-.restaurant-left {
-flex-direction: column;
-align-items: stretch;
-gap: 10px;
-}
-
-.restaurant-image {
-width: 100% !important;
-height: auto !important;
-}
-
-.restaurant-info {
-width: 100%;
-padding: 0;
+  background-color: #ddd;
+  margin: 16px 0;
+  align-self: stretch;
 }
 
 .restaurant-right {
-
-text-align: center;
-width: 100%;
-margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  min-width: 140px;
+  gap: 12px;
+}
+.reserve-button {
+  background-color: #1a855d;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+}
+.price-label {
+  font-weight: 500;
+  margin-right: 4px;
 }
 
-.restaurant-filter {
-flex-direction: column;
-align-items: stretch;
-}
-
-	 .restaurant-divider-vertical {
-    width: 60%;
-    height: 1px;
-    background-color: #ccc;
-    margin: 20px auto;
-    display: block;
-  }
-	
-.restaurant-filter input,
-.restaurant-filter button {
-width: 100%;
-
-}
-	
-	
-	.restaurant-contact-note {
+/* Responsive */
+@media (max-width: 768px) {
+  .restaurant-filter {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    align-items: stretch;
+  }
+  .restaurant-filter input[type="text"],
+  .restaurant-filter input[type="number"] {
+    width: 100%;
+  }
+  .liste-restaurants {
+    gap: 16px;
+  }
+  .restaurant-card {
+    flex-direction: column;
+  }
+  .restaurant-left,
+  .restaurant-right {
+    width: 100%;
+    padding: 12px;
+  }
+  .restaurant-left {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .restaurant-image {
+    width: 100%;
+    height: auto;
+  }
+  .restaurant-divider-vertical {
+    width: 80%;
+    height: 1px;
+    margin: 12px auto;
   }
 }
-

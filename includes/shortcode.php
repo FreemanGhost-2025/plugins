@@ -9,66 +9,64 @@ function rl_afficher_liste( $atts ) {
     ], $atts, 'liste_test_plugins' );
     $post_type = sanitize_key( $atts['type'] );
 
+    // URL actuelle pour réinitialiser les filtres
+    $current_url = strtok( $_SERVER['REQUEST_URI'], '?' );
+
     // 2) Configuration des filtres par CPT
     $filtres_config = [
         'test' => [
             [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
             [ 'name'=>'type_de_restauration', 'placeholder'=>'Type de restauration', 'type'=>'text'   ],
             [ 'name'=>'budget_moyen',         'placeholder'=>'Budget moyen',        'type'=>'number' ],
-            [ 'name'=>'populaire_pour', 'placeholder'=>'Populaire pour', 'type'=>'checkbox'],
+            [ 'name'=>'populaire_pour',       'placeholder'=>'Populaire pour',       'type'=>'checkbox'],
         ]
     ];
 
     // 3) Affichage du formulaire de filtres
-    echo '<form method="GET" class="restaurant-filter">';
+    echo '<form method="GET" action="'. esc_url( $current_url ) .'" class="restaurant-filter">';
     if ( isset( $filtres_config[ $post_type ] ) ) {
         foreach ( $filtres_config[ $post_type ] as $f ) {
             $name = $f['name'];
             $val  = $_GET[ $name ] ?? '';
 
-if ( $f['type'] === 'checkbox' ) {
-    // on récupère un ID de post 'test' pour charger la config ACF
-    $dummy = get_posts([
-        'post_type'      => $post_type,
-        'posts_per_page' => 1,
-        'fields'         => 'ids',
-    ]);
-    if ( ! empty( $dummy ) ) {
-        $field = get_field_object( $name, $dummy[0] );
-    } else {
-        $field = get_field_object( $name );
-    }
-
-    if ( ! empty( $field['choices'] ) ) {
-        echo '<div class="filter-field"><span class="filter-label">'
-             . esc_html( $f['placeholder'] )
-             . '</span>';
-        $selected = (array) ( $_GET[ $name ] ?? [] );
-
-        foreach ( $field['choices'] as $value => $label ) {
-            $checked = in_array( $value, $selected, true ) ? ' checked' : '';
-            // type="checkbox", name="populaire_pour[]" et value dynamiques
-            printf(
-                '<label><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
-                esc_attr( $name ),   // => name="populaire_pour[]"
-                esc_attr( $value ),  // valeur de la choice
-                $checked,
-                esc_html( $label )   // label de la choice
-            );
-        }
-        echo '</div>';
-    }
-    continue;
-} else {
+            if ( $f['type'] === 'checkbox' ) {
+                // Chargement des choix ACF
+                $dummy = get_posts([
+                    'post_type'      => $post_type,
+                    'posts_per_page' => 1,
+                    'fields'         => 'ids',
+                ]);
+                if ( ! empty( $dummy ) ) {
+                    $field = get_field_object( $name, $dummy[0] );
+                } else {
+                    $field = get_field_object( $name );
+                }
+                if ( ! empty( $field['choices'] ) ) {
+                    echo '<div class="filter-field"><span class="filter-label">'. esc_html( $f['placeholder'] ) .'</span>';
+                    $selected = (array) ( $_GET[ $name ] ?? [] );
+                    foreach ( $field['choices'] as $value => $label ) {
+                        $checked = in_array( $value, $selected, true ) ? ' checked' : '';
+                        printf(
+                            '<label class="filter-checkbox"><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
+                            esc_attr( $name ),
+                            esc_attr( $value ),
+                            $checked,
+                            esc_html( $label )
+                        );
+                    }
+                    echo '</div>';
+                }
+            } else {
                 // Champ text ou number
                 $attrs = '';
                 if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
                 if ( isset( $f['max'] ) ) $attrs .= ' max="'. intval( $f['max'] ) .'"';
                 printf(
-                    '<div class="filter-field"><input type="%s" name="%s" placeholder="%s" value="%s"%s /></div>',
+                    '<div class="filter-field"><span class="filter-label sr-only">%4$s</span><input type="%s" name="%s" placeholder="%s" value="%s"%s /></div>',
                     esc_attr( $f['type'] ),
                     esc_attr( $name ),
                     esc_attr( $f['placeholder'] ),
+                    esc_html( $f['placeholder'] ),
                     esc_attr( $val ),
                     $attrs
                 );
@@ -76,11 +74,9 @@ if ( $f['type'] === 'checkbox' ) {
         }
     }
     echo '<div class="filter-field">';
-    
-    
     echo '<button type="submit" class="btn-filter">Filtrer</button>';
-    echo '<a href="' . esc_url( $current_url ) . '" class="btn-clear-filters">Effacer les filtres</a>';
-echo '</div>';
+    echo '<a href="'. esc_url( $current_url ) .'" class="btn-clear-filters">Effacer les filtres</a>';
+    echo '</div>';
     echo '</form>';
 
     // 4) Construction du meta_query
@@ -150,24 +146,21 @@ echo '</div>';
                     );
                 }
                 echo '<div class="restaurant-info">';
-                  printf( '<h3>%s</h3>', esc_html( get_the_title() ) );
-                  // Champs ACF “test”
+                  printf( '<h3 class="restaurant-title">%s</h3>', esc_html( get_the_title() ) );
                   $avis = get_field( 'avis', $id );
+                  if ( $avis ) echo '<p class="restaurant-etoiles">⭐ '. esc_html( $avis ) .'</p>';
                   $type = get_field( 'type_de_restauration', $id );
-                  $popu = get_field( 'populaire_pour', $id );
+                  if ( $type ) echo '<p class="restaurant-type"><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
                   $description = get_field( 'description', $id );
-                  $budg = get_field( 'budget_moyen', $id );
-
-
-                  if ( $avis ) echo '<p>⭐ '. esc_html( $avis ) .'</p>';
-                  if ( $type ) echo '<p><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
-                   if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
+                  if ( $description )  echo '<p class="restaurant-description">'. esc_html( $description ).'</p>';
+                  $popu = get_field( 'populaire_pour', $id );
                   if ( is_array( $popu ) && ! empty( $popu ) ) {
-                      echo '<p class="restaurant-telephone"><strong>Populaire pour :</strong> '. implode( ', ', array_map( 'esc_html', $popu ) ) .'</p>';
+                      echo '<p class="restaurant-etoiles"><strong>Populaire pour :</strong> '. implode( ', ', array_map( 'esc_html', $popu ) ) .'</p>';
                   }
-                  if ( $budg ) echo '<p>Budget : '. esc_html( $budg ) .' FCFA</p>';
-                echo '</div>';
-              echo '</div>';
+                  $budg = get_field( 'budget_moyen', $id );
+                  if ( $budg ) echo '<p class="restaurant-price"><span class="price-label">Budget :</span> '. esc_html( $budg ) .' FCFA</p>';
+                echo '</div>';// .restaurant-info
+              echo '</div>';// .restaurant-left
 
               // Séparateur
               echo '<div class="restaurant-divider-vertical"></div>';
@@ -181,11 +174,11 @@ echo '</div>';
                         esc_url( $link )
                     );
                 }
-              echo '</div>';
+              echo '</div>';// .restaurant-right
 
-            echo '</div>';
+            echo '</div>';// .restaurant-card
         }
-        echo '</div>';
+        echo '</div>';// .liste-restaurants
         wp_reset_postdata();
     } else {
         printf(
