@@ -104,8 +104,15 @@
   color: #222;
   margin: 0;
 }
+/* Affiche les étoiles et type sur la même ligne */
 .restaurant-etoiles,
-.restaurant-type,
+.restaurant-type {
+  display: inline-block;
+  margin-right: 12px;
+  font-size: 14px;
+  color: #555;
+  margin: 4px 0;
+}
 .restaurant-description,
 .restaurant-price {
   font-size: 14px;
