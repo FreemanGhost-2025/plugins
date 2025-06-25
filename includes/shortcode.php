@@ -134,10 +134,19 @@ function rl_afficher_liste( $atts ) {
             $q->the_post();
             $id = get_the_ID();
 
+             // ACF
+             $img = get_field( 'images', $id );
+             $avis = get_field( 'avis', $id );
+             $type = get_field( 'type_de_restauration', $id );
+             $description = get_field( 'description', $id );
+             $popu = get_field( 'populaire_pour', $id );
+             $budg = get_field( 'budget_moyen', $id );
+             $link = get_field( 'reservation', $id );
+
             echo '<div class="restaurant-card">';
               // Bloc gauche
               echo '<div class="restaurant-left">';
-                $img = get_field( 'images', $id );
+                
                 if ( $img && is_array( $img ) ) {
                     printf(
                         '<img src="%s" class="restaurant-image" alt="%s"/>',
@@ -147,20 +156,20 @@ function rl_afficher_liste( $atts ) {
                 }
                 echo '<div class="restaurant-info">';
                   printf( '<h3 class="restaurant-title">%s</h3>', esc_html( get_the_title() ) );
-                  $avis = get_field( 'avis', $id );
+                  
 
                   // Type de restaurant + étoiles
                   echo '<div class="note">';
                   if ( $avis ) echo '<p class="restaurant-etoiles">⭐ '. esc_html( $avis ) .'</p>';
-                  $type = get_field( 'type_de_restauration', $id );
+                 
 
                   if ( $type ) echo '<p class="restaurant-type"><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
                   echo '</div>';
 
 
-                  $description = get_field( 'description', $id );
+                  
                   if ( $description )  echo '<p class="restaurant-description">'. esc_html( $description ).'</p>';
-                  $popu = get_field( 'populaire_pour', $id );
+                  
                   if ( is_array( $popu ) && ! empty( $popu ) ) {
                     echo '<p class="restaurant-etoiles"><strong>Populaire pour :</strong> ';
                     foreach ( $popu as $val ) {
@@ -179,10 +188,15 @@ function rl_afficher_liste( $atts ) {
               // Bloc droite
               echo '<div class="restaurant-right">';
 
-              $budg = get_field( 'budget_moyen', $id );
-                  if ( $budg ) echo '<p class="restaurant-price"><span class="price-label">Budget :</span> '. esc_html( $budg ) .' FCFA</p>';
+              
+                  if ( $budg ) {
+                    echo '<span class="price-label">Minimum à prévoir</span>';
+                     echo '<p class="restaurant-price"> '. esc_html( $budg ) .' FCFA</p>';
 
-                $link = get_field( 'reservation', $id );
+                  }
+                 
+
+                
                 if ( $link ) {
                     printf(
                         '<a class="reserve-button" href="%s" target="_blank">Réserver</a>',
