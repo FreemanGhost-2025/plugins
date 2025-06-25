@@ -169,8 +169,7 @@ function rl_afficher_liste( $atts ) {
                     echo '</p>';
                     }
 
-                  $budg = get_field( 'budget_moyen', $id );
-                  if ( $budg ) echo '<p class="restaurant-price"><span class="price-label">Budget :</span> '. esc_html( $budg ) .' FCFA</p>';
+                  
                 echo '</div>';// .restaurant-info
               echo '</div>';// .restaurant-left
 
@@ -179,6 +178,10 @@ function rl_afficher_liste( $atts ) {
 
               // Bloc droite
               echo '<div class="restaurant-right">';
+
+              $budg = get_field( 'budget_moyen', $id );
+                  if ( $budg ) echo '<p class="restaurant-price"><span class="price-label">Budget :</span> '. esc_html( $budg ) .' FCFA</p>';
+
                 $link = get_field( 'reservation', $id );
                 if ( $link ) {
                     printf(
