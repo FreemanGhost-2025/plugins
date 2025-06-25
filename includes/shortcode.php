@@ -199,7 +199,7 @@ function rl_afficher_liste( $atts ) {
                 
                 if ( $link ) {
                     printf(
-                        '<a class="reserve-button" href="%s" target="_blank">Réserver</a>',
+                        '<a class="reserve-button" href="%s" target="_blank">Commander</a>',
                         esc_url( $link )
                     );
                 }
