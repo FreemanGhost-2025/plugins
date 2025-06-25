@@ -163,7 +163,7 @@ echo '</div>';
                   if ( $type ) echo '<p><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
                    if ( $description )  echo '<p> '.   esc_html( $description ).' </p>';
                   if ( is_array( $popu ) && ! empty( $popu ) ) {
-                      echo '<p><strong>Populaire pour :</strong> '. implode( ', ', array_map( 'esc_html', $popu ) ) .'</p>';
+                      echo '<p class="restaurant-telephone"><strong>Populaire pour :</strong> '. implode( ', ', array_map( 'esc_html', $popu ) ) .'</p>';
                   }
                   if ( $budg ) echo '<p>Budget : '. esc_html( $budg ) .' FCFA</p>';
                 echo '</div>';

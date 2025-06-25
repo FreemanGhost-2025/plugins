@@ -131,6 +131,82 @@
 
 
 
+.btn-clear-filters {
+  padding: 18px;
+  font-size: 14px;
+  background-color: #1A855D; /* ← modifie cette couleur */
+  color: white;              /* couleur du texte */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+	 margin: 5px;
+}
+
+.filter-label{
+    margin: 5px;
+	font-size: 15px;
+	font-weight: bold;
+	display: block;
+	text-transform :uppercase
+	
+}
+
+
+form label{
+	margin: 0px;
+	 font-size: 10px;
+ display: inline-block;
+	}
+
+
+form input[type=checkbox]{
+	margin: 8px;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @media (max-width: 768px) {
 .restaurant-card {
 flex-direction: column;
