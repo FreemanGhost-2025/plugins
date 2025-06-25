@@ -157,13 +157,18 @@ function rl_afficher_liste( $atts ) {
                   if ( $type ) echo '<p class="restaurant-type"><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
                   echo '</div>';
 
-                  
+
                   $description = get_field( 'description', $id );
                   if ( $description )  echo '<p class="restaurant-description">'. esc_html( $description ).'</p>';
                   $popu = get_field( 'populaire_pour', $id );
                   if ( is_array( $popu ) && ! empty( $popu ) ) {
-                      echo '<p class="restaurant-etoiles"><strong>Populaire pour :</strong> '. implode( ', ', array_map( 'esc_html', $popu ) ) .'</p>';
-                  }
+                    echo '<p class="restaurant-etoiles"><strong>Populaire pour :</strong> ';
+                    foreach ( $popu as $val ) {
+                        printf( '<span>%s</span>', esc_html( $val ) );
+                    }
+                    echo '</p>';
+                    }
+
                   $budg = get_field( 'budget_moyen', $id );
                   if ( $budg ) echo '<p class="restaurant-price"><span class="price-label">Budget :</span> '. esc_html( $budg ) .' FCFA</p>';
                 echo '</div>';// .restaurant-info
