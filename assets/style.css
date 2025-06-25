@@ -107,7 +107,6 @@
 /* Affiche les étoiles et type sur la même ligne */
 .note {
   display: inline-block;
-  display: inline-block;
   margin-right: 12px;
   font-size: 14px;
   color: #555;
@@ -130,7 +129,7 @@
   margin: 4px 0;
 }
 .restaurant-type i {
-  margin-right: 6px;
+  margin: 8px;
 }
 
 .restaurant-divider-vertical {
