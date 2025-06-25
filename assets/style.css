@@ -103,6 +103,7 @@
   font-weight: 600;
   color: #222;
   margin: 0;
+  text-transform:uppercase;
 }
 /* Affiche les étoiles et type sur la même ligne */
 .note {
@@ -114,10 +115,10 @@
 }
 
 .restaurant-etoiles span {
-  background-color: #555;
-  color: #fff;
-  border-radius: 4px;
-  font-size: 8px;
+  background-color: #ebebeb;
+  color: #434141;
+  border-radius: 6px;
+  font-size: 10px;
   padding: 2px 6px;
   margin-right: 4px;
   display: inline-block;
@@ -139,6 +140,11 @@
 }
 .restaurant-type i {
   margin: 8px;
+}
+
+.restaurant-type p {
+   background-color: #ebebeb;
+  color: #434141;
 }
 
 .restaurant-divider-vertical {
