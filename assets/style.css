@@ -105,6 +105,11 @@
   margin: 0;
 }
 /* Affiche les étoiles et type sur la même ligne */
+.note {
+  display: inline-block;
+}
+
+
 .restaurant-etoiles,
 .restaurant-type {
   display: inline-block;

@@ -148,9 +148,16 @@ function rl_afficher_liste( $atts ) {
                 echo '<div class="restaurant-info">';
                   printf( '<h3 class="restaurant-title">%s</h3>', esc_html( get_the_title() ) );
                   $avis = get_field( 'avis', $id );
+
+                  // Type de restaurant + étoiles
+                  echo '<div class="note">';
                   if ( $avis ) echo '<p class="restaurant-etoiles">⭐ '. esc_html( $avis ) .'</p>';
                   $type = get_field( 'type_de_restauration', $id );
+
                   if ( $type ) echo '<p class="restaurant-type"><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
+                  echo '</div>';
+
+                  
                   $description = get_field( 'description', $id );
                   if ( $description )  echo '<p class="restaurant-description">'. esc_html( $description ).'</p>';
                   $popu = get_field( 'populaire_pour', $id );
