@@ -3,11 +3,38 @@
  * Shortcode [liste_test_plugins type="test"]
  */
 function rl_afficher_liste( $atts ) {
-    // 1) Valeurs par défaut
+    // 1) Valeurs par défaut : on ajoute 'term'
     $atts = shortcode_atts( [
         'type' => 'test',
+        'term' => '',         // slug de catégorie optionnel
     ], $atts, 'liste_test_plugins' );
     $post_type = sanitize_key( $atts['type'] );
+    $term      = sanitize_key( $atts['term'] );
+
+        $args = [
+        'post_type'      => $post_type,
+        'posts_per_page' => -1,
+    ];
+    if ( ! empty( $meta_query ) && count( $meta_query ) > 1 ) {
+        $args['meta_query'] = $meta_query;
+    }
+    // ← NOUVEAU : si on a un term, on filtre aussi sur la catégorie
+    if ( $term ) {
+        $args['tax_query'] = [
+            [
+                'taxonomy' => 'category',
+                'field'    => 'slug',
+                'terms'    => $term,
+            ],
+        ];
+    }
+
+    $q = new WP_Query( $args );
+    // … le reste de ton code d’affichage …
+}
+
+
+
 
     // URL actuelle pour réinitialiser les filtres
     $current_url = strtok( $_SERVER['REQUEST_URI'], '?' );
