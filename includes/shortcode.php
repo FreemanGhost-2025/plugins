@@ -150,6 +150,7 @@ function rl_afficher_liste( $atts ) {
             $popu        = get_field( 'populaire_pour', $id );
             $budg        = get_field( 'budget_moyen', $id );
             $link        = get_field( 'reservation', $id );
+            $lien_reservation = get_field('lien_reservation', $post_id);
 
             echo '<div class="restaurant-card">';
               echo '<div class="restaurant-left">';
@@ -203,6 +204,9 @@ function rl_afficher_liste( $atts ) {
                     }
                 }
 
+                if ($lien_reservation) {
+                        echo '<a class="reserve-button" href="' . esc_url($lien_reservation) . '" target="_blank">Itinéraire</a>';
+                    }
               echo '</div>';
             echo '</div>';
         }
