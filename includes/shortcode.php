@@ -183,10 +183,24 @@ function rl_afficher_liste( $atts ) {
                   echo '<p class="restaurant-price">'. esc_html( $budg ) .' FCFA</p>';
                 }
                 if ( $link ) {
-                  printf(
-                    '<a class="reserve-button" href="%s" target="_blank">Commander</a>',
-                    esc_url( $link )
-                  );
+                    // Si le champ ACF est de type "Lien", $link est un tableau
+                    if ( is_array( $link ) ) {
+                        $url    = $link['url']    ?? '';
+                        $text   = $link['title']  ?: 'Réserver';
+                        $target = $link['target'] ?: '_self';
+                    } else {
+                        // Si c'est juste une URL en texte
+                        $url    = $link;
+                        $text   = 'Réserver';
+                        $target = '_blank';
+                    }
+
+                    printf(
+                        '<a class="reserve-button" href="%s" target="%s">%s</a>',
+                        esc_url(   $url   ),
+                        esc_attr(  $target ),
+                        esc_html(  $text   )
+                    );
                 }
               echo '</div>';
             echo '</div>';
