@@ -213,35 +213,45 @@ function rl_afficher_liste( $atts ) {
                         esc_attr( get_the_title() )
                     );
                 }
-                echo '<div class="restaurant-info">';
-                  printf( '<h3 class="restaurant-title">%s</h3>', esc_html( get_the_title() ) );
-                  echo '<div class="note">';
+               echo '<div class="restaurant-info">';
+                printf( '<h3 class="restaurant-title">%s</h3>', esc_html( get_the_title() ) );
+                echo '<div class="note">';
                     if ( $avis ) echo '<p class="restaurant-etoiles">⭐ '. esc_html( $avis ) .'</p>';
                     if ( $type ) echo '<p class="restaurant-type"><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
-                  echo '</div>';
-                  if ( $description ) echo '<p class="restaurant-description">'. esc_html( $description ) .'</p>';
-                  if ( is_array( $popu ) && ! empty( $popu ) ) {
-                    echo '<p class="restaurant-populaire"><strong>Populaire pour :</strong> ';
-                    foreach ( $popu as $val ) {
-                        echo '<span>'. esc_html( $val ) .'</span> ';
-                    }
-                    echo '</p>';
-                  }
-                  if ( is_array( $spe ) && ! empty( $spe ) ) {
-                    echo '<p class="restaurant-populaire"><strong>Spécialité :</strong> ';
-                    foreach ( $spe as $val ) {
-                        echo '<span>'. esc_html( $val ) .'</span> ';
-                    }
-                    echo '</p>';
-                  }
-                   if ( is_array( $serphar ) && ! empty( $serphar ) ) {
-                    echo '<p class="restaurant-populaire"><strong>Populaire pour :</strong> ';
-                    foreach ( $serphar as $val ) {
-                        echo '<span>'. esc_html( $val ) .'</span> ';
-                    }
-                    echo '</p>';
-                  }
                 echo '</div>';
+                
+                if ( $description ) {
+                    echo '<p class="restaurant-description">'. esc_html( $description ) .'</p>';
+                }
+
+                // Si on est dans une catégorie qui utilise 'populaire_pour'
+                if ( ! empty( $popu ) && is_array( $popu ) && in_array( $term, ['maquis','street-food'], true ) ) {
+                    echo '<p class="restaurant-populaire"><strong>Populaire pour :</strong> ';
+                    foreach ( $popu as $v ) {
+                        echo '<span>'. esc_html( $v ) .'</span> ';
+                    }
+                    echo '</p>';
+                }
+
+                // Si on est dans la catégorie 'hopitaux', on affiche 'specialite'
+                if ( ! empty( $spe ) && is_array( $spe ) && $term === 'hopitaux' ) {
+                    echo '<p class="restaurant-specialite"><strong>Spécialité :</strong> ';
+                    foreach ( $spe as $v ) {
+                        echo '<span>'. esc_html( $v ) .'</span> ';
+                    }
+                    echo '</p>';
+                }
+
+                // Si on est dans la catégorie 'pharmacies', on affiche le champ 'services'
+                if ( ! empty( $serphar ) && is_array( $serphar ) && $term === 'pharmacies' ) {
+                    echo '<p class="restaurant-services"><strong>Services :</strong> ';
+                    foreach ( $serphar as $v ) {
+                        echo '<span>'. esc_html( $v ) .'</span> ';
+                    }
+                    echo '</p>';
+                }
+            echo '</div>'; // .restaurant-info
+
               echo '</div>';
               echo '<div class="restaurant-divider-vertical"></div>';
               echo '<div class="restaurant-right">';
