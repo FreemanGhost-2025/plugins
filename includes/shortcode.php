@@ -72,7 +72,7 @@ function rl_afficher_liste( $atts ) {
                 : get_field_object( $name );
 
             if ( ! empty( $field['choices'] ) && is_array( $field['choices'] ) ) {
-                echo '<div class="filter-field">';
+                echo '<div class="filter-field filter-field--checkboxes">';
                 echo '<span class="filter-label">'. esc_html( $f['placeholder'] ) .'</span>';
                 $selected = (array) ( $_GET[ $name ] ?? [] );
                 foreach ( $field['choices'] as $value => $label ) {
