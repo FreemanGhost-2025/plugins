@@ -60,12 +60,21 @@ function rl_afficher_liste( $atts ) {
         $val  = $_GET[ $name ] ?? '';
 
         if ( $f['type'] === 'checkbox' ) {
-            // on récupère directement la configuration ACF du champ
-            $field = get_field_object( $name );
+            // on récupère un premier post pour avoir un ID valide
+            $dummy = get_posts([
+                'post_type'      => $post_type,
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+            ]);
+            // on passe l'ID au get_field_object() pour qu'il charge bien les 'choices'
+            $field = ! empty( $dummy )
+                ? get_field_object( $name, $dummy[0] )
+                : get_field_object( $name );
+
             if ( ! empty( $field['choices'] ) && is_array( $field['choices'] ) ) {
                 echo '<div class="filter-field">';
                 echo '<span class="filter-label">'. esc_html( $f['placeholder'] ) .'</span>';
-                $selected = (array) $val;
+                $selected = (array) ( $_GET[ $name ] ?? [] );
                 foreach ( $field['choices'] as $value => $label ) {
                     $checked = in_array( $value, $selected, true ) ? ' checked' : '';
                     printf(
@@ -80,6 +89,7 @@ function rl_afficher_liste( $atts ) {
             }
             continue;
         }
+
 
         // champ texte / nombre
         $attrs = '';
