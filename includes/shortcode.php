@@ -33,6 +33,7 @@ function rl_afficher_liste( $atts ) {
             'pharmacies' => [
                 [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
                 [ 'name'=>'services',       'placeholder'=>'Services disponibles',      'type'=>'checkbox' ],
+                [ 'name'=>'populaire_pour',       'placeholder'=>'Populaire pour',      'type'=>'checkbox' ],
             ],
              'plages-et-piscines' => [
                 [ 'name'=>'entree',       'placeholder'=>'Gratuit ou payant',      'type'=>'checkbox' ],
@@ -46,7 +47,7 @@ function rl_afficher_liste( $atts ) {
         ],
     ];
 // DEBUG — affiche dans le HTML (ou dans error_log si tu préfères)
-echo '<pre>Term passé : '. esc_html($term) ."\nClés dispo : ". esc_html( implode(', ', array_keys($filtres_config[$post_type])) ) .'</pre>';
+// echo '<pre>Term passé : '. esc_html($term) ."\nClés dispo : ". esc_html( implode(', ', array_keys($filtres_config[$post_type])) ) .'</pre>';
 
     // 3) Choix des filtres à afficher selon le CPT et la catégorie
     $to_show = [];
