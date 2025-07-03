@@ -87,7 +87,7 @@ function rl_afficher_liste( $atts ) {
             }
             continue;
             }
-        
+        } else {
             // champ texte / nombre
             $attrs = '';
             if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
