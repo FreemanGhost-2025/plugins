@@ -45,6 +45,8 @@ function rl_afficher_liste( $atts ) {
             ],
         ],
     ];
+// DEBUG — affiche dans le HTML (ou dans error_log si tu préfères)
+echo '<pre>Term passé : '. esc_html($term) ."\nClés dispo : ". esc_html( implode(', ', array_keys($filtres_config[$post_type])) ) .'</pre>';
 
     // 3) Choix des filtres à afficher selon le CPT et la catégorie
     $to_show = [];
