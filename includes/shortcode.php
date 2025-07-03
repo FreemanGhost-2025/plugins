@@ -114,28 +114,7 @@ function rl_afficher_liste( $atts ) {
                 echo '</form>';
 
 
-        // champ texte / nombre
-        $attrs = '';
-        if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
-        if ( isset( $f['max'] ) ) $attrs .= ' max="'. intval( $f['max'] ) .'"';
-        printf(
-            '<div class="filter-field">'
-          .  '<span class="filter-label sr-only">%4$s</span>'
-          .  '<input type="%1$s" name="%2$s" placeholder="%3$s" value="%5$s"%6$s />'
-          .  '</div>',
-            esc_attr( $f['type'] ),
-            esc_attr( $name ),
-            esc_attr( $f['placeholder'] ),
-            esc_html( $f['placeholder'] ),
-            esc_attr( $val ),
-            $attrs
-        );
-    }
-    echo '<div class="filter-field">';
-      echo '<button type="submit" class="btn-filter">Filtrer</button>';
-      echo '<a href="'. esc_url( $current_url ) .'" class="btn-clear-filters">Effacer</a>';
-    echo '</div>';
-    echo '</form>';
+       
 
     // 5) Construction de la meta_query
     $meta_query = [ 'relation' => 'AND' ];
