@@ -54,64 +54,61 @@ function rl_afficher_liste( $atts ) {
     }
 
    // 4) Affichage du formulaire
+              // 4) Affichage du formulaire
                 echo '<form method="GET" action="' . esc_url( $current_url ) . '" class="restaurant-filter">';
 
-                // — Zone “Avis” (always show if configuré) —
-                if ( isset( $to_show ) ) {
-                    echo '<div class="filter-field filter-field--avis">';
-                    // si l’array $to_show contient un champ avis, on l’affiche ici
-                    if ( in_array( 'avis', wp_list_pluck( $to_show, 'name' ), true ) ) {
-                        printf(
-                            '<input type="text" name="avis" placeholder="Avis" value="%s" />',
-                            esc_attr( $_GET['avis'] ?? '' )
-                        );
-                    }
-                    echo '</div>';
-                }
-
-                // — Zone “Checkboxes” —  
-                // on regroupe ici tous les champs checkbox
-                echo '<div class="filter-field filter-field--checkboxes">';
                 foreach ( $to_show as $f ) {
-                    if ( $f['type'] !== 'checkbox' ) {
-                        continue;
-                    }
-                    // label du groupe
-                    echo '<span class="filter-label">' . esc_html( $f['placeholder'] ) . '</span>';
+                    $name = $f['name'];
+                    $val  = $_GET[ $name ] ?? '';
 
-                    // récupère l’objet ACF pour ce champ
-                    $dummy = get_posts([
-                        'post_type'      => $post_type,
-                        'posts_per_page' => 1,
-                        'fields'         => 'ids',
-                    ]);
-                    $field = ! empty( $dummy )
-                        ? get_field_object( $f['name'], $dummy[0] )
-                        : get_field_object( $f['name'] );
-
-                    if ( ! empty( $field['choices'] ) && is_array( $field['choices'] ) ) {
-                        $selected = (array) ( $_GET[ $f['name'] ] ?? [] );
-                        foreach ( $field['choices'] as $value => $label ) {
-                            $checked = in_array( $value, $selected, true ) ? ' checked' : '';
-                            printf(
-                                '<label class="filter-checkbox"><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
-                                esc_attr( $f['name'] ),
-                                esc_attr( $value ),
-                                $checked,
-                                esc_html( $label )
-                            );
+                    if ( $f['type'] === 'checkbox' ) {
+                        // --- votre code existant pour les checkbox ---
+                        $field = get_field_object( $name, get_posts([
+                            'post_type'      => $post_type,
+                            'posts_per_page' => 1,
+                            'fields'         => 'ids',
+                        ])[0] );
+                        if ( ! empty( $field['choices'] ) ) {
+                            echo '<div class="filter-field filter-field--checkboxes">';
+                            echo '<span class="filter-label">' . esc_html( $f['placeholder'] ) . '</span>';
+                            $selected = (array) $val;
+                            foreach ( $field['choices'] as $value => $label ) {
+                                $checked = in_array( $value, $selected, true ) ? ' checked' : '';
+                                printf(
+                                    '<label class="filter-checkbox"><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
+                                    esc_attr( $name ),
+                                    esc_attr( $value ),
+                                    $checked,
+                                    esc_html( $label )
+                                );
+                            }
+                            echo '</div>';
                         }
+                        continue; // IMPORTANT : saute le reste de la boucle pour ce champ
                     }
-                }
-                echo '</div>'; // .filter-field--checkboxes
 
-                // — Zone “Actions” (Filtrer + Effacer) —
+                    // --- remettre ici l'affichage des champs text / number ---
+                    $attrs = '';
+                    if ( isset( $f['min'] ) ) $attrs .= ' min="' . intval( $f['min'] ) . '"';
+                    if ( isset( $f['max'] ) ) $attrs .= ' max="' . intval( $f['max'] ) . '"';
+
+                    printf(
+                        '<div class="filter-field"><input type="%1$s" name="%2$s" placeholder="%3$s" value="%4$s"%5$s/></div>',
+                        esc_attr( $f['type'] ),      // type="text" ou "number"
+                        esc_attr( $name ),           // name="budget_moyen" ou "type_de_restauration"
+                        esc_attr( $f['placeholder'] ),
+                        esc_attr( $val ),
+                        $attrs
+                    );
+                }
+
                 echo '<div class="filter-field filter-field--actions">';
                 echo '<button type="submit" class="btn-filter">Filtrer</button>';
                 echo '<a href="' . esc_url( $current_url ) . '" class="btn-clear-filters">Effacer</a>';
                 echo '</div>';
 
                 echo '</form>';
+
 
 
        
