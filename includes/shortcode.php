@@ -218,7 +218,7 @@ function rl_afficher_liste( $atts ) {
 
                   // Spécialité (hopitaux)
                   if ( ! empty( $spe ) && is_array( $spe ) && $term === 'hopitaux' ) {
-                    echo '<p class="restaurant-specialite"><strong>Spécialité :</strong> '
+                    echo '<p class="hopitaux-specialite"><strong>Spécialité :</strong> '
                        . implode(', ', array_map('esc_html', $spe))
                        . '</p>';
                   }
