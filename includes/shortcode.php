@@ -11,10 +11,6 @@ function rl_afficher_liste( $atts ) {
 
     $post_type   = sanitize_key( $atts['type'] );
     $term        = sanitize_key( $atts['term'] );
-    echo '<pre style="background:#f2f2f2;padding:10px;">';
-echo "Term récupéré : {$term}\n";
-echo "Clés dans config : " . implode(', ', array_keys( $filtres_config['test'] ));
-echo '</pre>';
     $current_url = strtok( $_SERVER['REQUEST_URI'], '?' );
 
     // 2) Config des filtres, par CPT ET par term (slug de category)
@@ -70,27 +66,17 @@ echo '</pre>';
         $name = $f['name'];
         $val  = $_GET[ $name ] ?? '';
 
-        if ( $f['type'] === 'checkbox' ) {
-            // on récupère les choices ACF dynamiquement
-            $dummy = get_posts([
-                'post_type'      => $post_type,
-                'posts_per_page' => 1,
-                'fields'         => 'ids',
-            ]);
-            $field = ! empty( $dummy )
-                ? get_field_object( $name, $dummy[0] )
-                : get_field_object( $name );
-
-            if ( ! empty( $field['choices'] ) ) {
+                if ( $f['type'] === 'checkbox' ) {
+            // on récupère directement la configuration ACF du champ
+            $field = get_field_object( $name );
+            if ( ! empty( $field['choices'] ) && is_array( $field['choices'] ) ) {
                 echo '<div class="filter-field">';
                 echo '<span class="filter-label">'. esc_html( $f['placeholder'] ) .'</span>';
-                $selected = (array) $val;
+                $selected = (array) ( $_GET[ $name ] ?? [] );
                 foreach ( $field['choices'] as $value => $label ) {
                     $checked = in_array( $value, $selected, true ) ? ' checked' : '';
                     printf(
-                        '<label class="filter-checkbox">'
-                        . '<input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s'
-                        . '</label>',
+                        '<label class="filter-checkbox"><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
                         esc_attr( $name ),
                         esc_attr( $value ),
                         $checked,
@@ -98,6 +84,8 @@ echo '</pre>';
                     );
                 }
                 echo '</div>';
+            }
+            continue;
             }
         } else {
             // champ texte / nombre
