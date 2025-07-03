@@ -222,7 +222,7 @@ p.restaurant-type  {
 }
 
 
-/* 1) Le formulaire en flex, champs sur la même ligne */
+/* --- CODE 1 adapté pour la zone Avis et Actions --- */
 form.restaurant-filter {
   display: flex;
   flex-wrap: wrap;
@@ -231,69 +231,67 @@ form.restaurant-filter {
   margin-bottom: 2rem;
 }
 
-/* 2) Les champs text/number prennent la place nécessaire */
-form.restaurant-filter .filter-field:not(.filter-buttons) {
+/* zone Avis et zone Actions (similaire à .filter-field:not(.filter-buttons)) */
+form.restaurant-filter .filter-field--avis,
+form.restaurant-filter .filter-field--actions {
   flex: 1 1 auto;
   display: flex;
   align-items: center;
 }
 
-/* 3) Le groupe de checkbox */
-form.restaurant-filter .filter-field--checkboxes {
-  display: flex;
-  flex-wrap: wrap;       /* autorise le retour à la ligne si vraiment il n’y a plus assez de place */
-  gap: 0.5rem 1rem;      /* un petit espace entre chaque case */
-  align-items: center;
-  margin-bottom: 1rem;
+/* --- CODE 2 pour les trois zones --- */
+/* zone Avis */
+.filter-field--avis {
+  flex: 1 1 20%;
 }
-form.restaurant-filter .filter-field--checkboxes .filter-label {
+
+/* zone cases à cocher */
+.filter-field--checkboxes {
+  flex: 1 1 60%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+.filter-field--checkboxes .filter-checkbox {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;        /* comme dans Code 1 */
+  white-space: nowrap;       /* idem */
+}
+.filter-field--checkboxes .filter-label {
   flex: 0 0 100%;
   margin-bottom: .5rem;
 }
 
-/* 4) Les boutons (submit + clear) en bas, 100% de large */
-form.restaurant-filter .filter-buttons {
-  flex: 1 1 100%;
+/* zone boutons */
+.filter-field--actions {
+  flex: 1 1 20%;
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
 }
-form.restaurant-filter .btn-filter {
-  flex: 1;
+.filter-field--actions .btn-filter {
+  width: 100%;
   background-color: #2f855a;
   color: #fff;
   border: none;
   padding: .75rem 1rem;
   text-transform: uppercase;
 }
-form.restaurant-filter .btn-clear-filters {
-  align-self: center;
+.filter-field--actions .btn-clear-filters {
   color: #2f855a;
   text-decoration: none;
 }
 
-form.restaurant-filter .filter-field--checkboxes .filter-checkbox {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 1rem;
-  white-space: nowrap;   /* empêche le label de sauter sur 2 lignes */
-}
-
-/* Le texte du label juste à côté de la checkbox */
-form.restaurant-filter .filter-field--checkboxes .filter-checkbox input {
-  margin-right: .25rem;
-}
-
-
-
-/* 5) Responsivité mobile */
+/* --- Code 1 pour la responsivité mobile --- */
 @media (max-width: 600px) {
   form.restaurant-filter {
     flex-direction: column;
   }
-  form.restaurant-filter .filter-field,
-  form.restaurant-filter .filter-buttons {
+  form.restaurant-filter .filter-field--avis,
+  form.restaurant-filter .filter-field--checkboxes,
+  form.restaurant-filter .filter-field--actions {
     flex: 1 1 100%;
   }
 }
-
-
