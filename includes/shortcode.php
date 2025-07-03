@@ -31,7 +31,7 @@ function rl_afficher_liste( $atts ) {
             ],
             'pharmacies' => [
                 [ 'name'=>'avis',           'placeholder'=>'Avis',                 'type'=>'text'     ],
-                [ 'name'=>'services',       'placeholder'=>'Services disponibles',  'type'=>'checkbox' ],
+                [ 'name'=>'services_pharmacies',       'placeholder'=>'Services disponibles',  'type'=>'checkbox' ],
                 
             ],
             'plages-et-piscines' => [
@@ -186,7 +186,7 @@ function rl_afficher_liste( $atts ) {
             $desc  = get_field( 'description', $id );
             $popu  = get_field( 'populaire_pour', $id );
             $spe   = get_field( 'specialite_hopitaux', $id );
-            $ser   = get_field( 'services', $id );
+            $ser   = get_field( 'services_pharmacies', $id );
             $budg  = get_field( 'budget_moyen', $id );
             $link  = get_field( 'reservation', $id );
             $itin  = get_field( 'lien_reservation', $id );
