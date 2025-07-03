@@ -27,7 +27,7 @@ function rl_afficher_liste( $atts ) {
             ],
             'hopitaux' => [
                 [ 'name'=>'avis',         'placeholder'=>'Avis',         'type'=>'text'   ],
-                [ 'name'=>'specialite',   'placeholder'=>'Spécialité',   'type'=>'checkbox' ],
+                [ 'name'=>'specialite_hopitaux',   'placeholder'=>'Spécialité',   'type'=>'checkbox' ],
             ],
             'pharmacies' => [
                 [ 'name'=>'avis',           'placeholder'=>'Avis',                 'type'=>'text'     ],
@@ -35,7 +35,7 @@ function rl_afficher_liste( $atts ) {
                 
             ],
             'plages-et-piscines' => [
-                [ 'name'=>'entree', 'placeholder'=>'Gratuit ou payant', 'type'=>'checkbox' ],
+                [ 'name'=>'entrees', 'placeholder'=>'Gratuit ou payant', 'type'=>'checkbox' ],
             ],
             'default' => [
                 [ 'name'=>'avis', 'placeholder'=>'Avis', 'type'=>'text' ],
@@ -185,7 +185,7 @@ function rl_afficher_liste( $atts ) {
             $type  = get_field( 'type_de_restauration', $id );
             $desc  = get_field( 'description', $id );
             $popu  = get_field( 'populaire_pour', $id );
-            $spe   = get_field( 'specialite', $id );
+            $spe   = get_field( 'specialite_hopitaux', $id );
             $ser   = get_field( 'services', $id );
             $budg  = get_field( 'budget_moyen', $id );
             $link  = get_field( 'reservation', $id );
