@@ -23,7 +23,7 @@ function rl_afficher_liste( $atts ) {
                 [ 'name'=>'populaire_pour',       'placeholder'=>'Populaire pour',      'type'=>'checkbox' ],
             ],
             // configuration spécifique pour term = "snack"
-            'stree-food' => [
+            'street-food' => [
                 [ 'name'=>'type_de_restauration', 'placeholder'=>'Type de restauration', 'type'=>'text' ],
                 [ 'name'=>'populaire_pour',       'placeholder'=>'Populaire pour',      'type'=>'checkbox' ],
             ],
@@ -199,7 +199,7 @@ function rl_afficher_liste( $atts ) {
             $description = get_field( 'description', $id );
             $popu        = get_field( 'populaire_pour', $id );
             $spe        = get_field( 'specialite', $id );
-            $serphar        = get_field( 'specialite', $id );
+            $serphar        = get_field( 'services', $id );
             $budg        = get_field( 'budget_moyen', $id );
             $link        = get_field( 'reservation', $id );
             $lien_reservation = get_field('lien_reservation', $id);
@@ -225,31 +225,25 @@ function rl_afficher_liste( $atts ) {
                 }
 
                 // Si on est dans une catégorie qui utilise 'populaire_pour'
-                if ( ! empty( $popu ) && is_array( $popu ) && in_array( $term, ['maquis','street-food'], true ) ) {
-                    echo '<p class="restaurant-populaire"><strong>Populaire pour :</strong> ';
-                    foreach ( $popu as $v ) {
-                        echo '<span>'. esc_html( $v ) .'</span> ';
+                if ( ! empty($popu) && is_array($popu) && in_array($term, ['maquis','street-food'], true) ) {
+                        echo '<p class="restaurant-populaire"><strong>Populaire pour :</strong> '
+                        . implode(', ', array_map('esc_html',$popu))
+                        . '</p>';
                     }
-                    echo '</p>';
-                }
 
-                // Si on est dans la catégorie 'hopitaux', on affiche 'specialite'
-                if ( ! empty( $spe ) && is_array( $spe ) && $term === 'hopitaux' ) {
-                    echo '<p class="restaurant-specialite"><strong>Spécialité :</strong> ';
-                    foreach ( $spe as $v ) {
-                        echo '<span>'. esc_html( $v ) .'</span> ';
+                    // Spécialité (hopitaux)
+                    if ( ! empty($spe) && is_array($spe) && $term === 'hopitaux' ) {
+                        echo '<p class="restaurant-specialite"><strong>Spécialité :</strong> '
+                        . implode(', ', array_map('esc_html',$spe))
+                        . '</p>';
                     }
-                    echo '</p>';
-                }
 
-                // Si on est dans la catégorie 'pharmacies', on affiche le champ 'services'
-                if ( ! empty( $serphar ) && is_array( $serphar ) && $term === 'pharmacies' ) {
-                    echo '<p class="restaurant-services"><strong>Services :</strong> ';
-                    foreach ( $serphar as $v ) {
-                        echo '<span>'. esc_html( $v ) .'</span> ';
+                    // Services (pharmacies)
+                    if ( ! empty($serphar) && is_array($serphar) && $term === 'pharmacies' ) {
+                        echo '<p class="restaurant-services"><strong>Services :</strong> '
+                        . implode(', ', array_map('esc_html',$serphar))
+                        . '</p>';
                     }
-                    echo '</p>';
-                }
             echo '</div>'; // .restaurant-info
 
               echo '</div>';
