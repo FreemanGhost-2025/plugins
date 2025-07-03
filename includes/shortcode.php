@@ -55,39 +55,48 @@ function rl_afficher_liste( $atts ) {
 
    // 4) Affichage du formulaire
               // 4) Affichage du formulaire
-              echo '<!-- debug term='.$term.' keys='.implode(',',array_keys($filtres_config[$post_type])).' -->';
 
                 echo '<form method="GET" action="' . esc_url( $current_url ) . '" class="restaurant-filter">';
+
+                // juste avant ta boucle foreach( $to_show as $f )
+$dummy = get_posts([
+  'post_type'      => $post_type,
+  'posts_per_page' => 1,
+  'fields'         => 'ids',
+]);
+$post_id_for_choices = ! empty($dummy) ? $dummy[0] : null;
+
+echo '<!-- DEBUG: term='.esc_html($term).' to_show_names='
+   . implode(',', wp_list_pluck($to_show,'name'))
+   .' -->';
+
 
                 foreach ( $to_show as $f ) {
                     $name = $f['name'];
                     $val  = $_GET[ $name ] ?? '';
 
                     if ( $f['type'] === 'checkbox' ) {
-                        // --- votre code existant pour les checkbox ---
-                        $field = get_field_object( $name, get_posts([
-                            'post_type'      => $post_type,
-                            'posts_per_page' => 1,
-                            'fields'         => 'ids',
-                        ])[0] );
-                        if ( ! empty( $field['choices'] ) ) {
-                            echo '<div class="filter-field filter-field--checkboxes">';
-                            echo '<span class="filter-label">' . esc_html( $f['placeholder'] ) . '</span>';
-                            $selected = (array) $val;
-                            foreach ( $field['choices'] as $value => $label ) {
-                                $checked = in_array( $value, $selected, true ) ? ' checked' : '';
-                                printf(
-                                    '<label class="filter-checkbox"><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
-                                    esc_attr( $name ),
-                                    esc_attr( $value ),
-                                    $checked,
-                                    esc_html( $label )
-                                );
+                            // récupère l'objet ACF en passant l'ID
+                            $field = get_field_object( $f['name'], $post_id_for_choices );
+                            if ( ! empty( $field['choices'] ) && is_array( $field['choices'] ) ) {
+                                echo '<div class="filter-field filter-field--checkboxes">';
+                                echo '<span class="filter-label">'. esc_html( $f['placeholder'] ) .'</span>';
+                                $selected = (array) ( $_GET[ $f['name'] ] ?? [] );
+                                foreach ( $field['choices'] as $value => $label ) {
+                                    $checked = in_array( $value, $selected, true ) ? ' checked' : '';
+                                    printf(
+                                        '<label class="filter-checkbox"><input type="checkbox" name="%1$s[]" value="%2$s"%3$s> %4$s</label>',
+                                        esc_attr( $f['name'] ),
+                                        esc_attr( $value ),
+                                        $checked,
+                                        esc_html( $label )
+                                    );
+                                }
+                                echo '</div>';
                             }
-                            echo '</div>';
+                            continue;
                         }
-                        continue; // IMPORTANT : saute le reste de la boucle pour ce champ
-                    }
+
 
                     // --- remettre ici l'affichage des champs text / number ---
                     $attrs = '';
