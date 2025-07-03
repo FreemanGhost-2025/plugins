@@ -28,6 +28,7 @@ function rl_afficher_liste( $atts ) {
                 [ 'name'=>'populaire_pour',       'placeholder'=>'Populaire pour',      'type'=>'checkbox' ],
             ],
             'hopitaux' => [
+                [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
                 [ 'name'=>'specialite',       'placeholder'=>'Spécialité',      'type'=>'checkbox' ],
             ],
             'pharmacies' => [
