@@ -220,3 +220,41 @@ p.restaurant-type  {
     margin: 12px auto;
   }
 }
+
+
+/* 1) Le form prend toute la largeur disponible */
+form.restaurant-filter {
+  width: 100%;
+  box-sizing: border-box; /* pour inclure padding/border dans le 100% */
+  display: flex;
+  flex-wrap: wrap;        /* pour faire descendre les champs si besoin */
+  gap: 1rem;              /* espace entre les champs */
+}
+
+/* 2) Chaque champ occupe une part égale (ici 1/4 de la largeur) */
+form.restaurant-filter .filter-field {
+  flex: 1 1 25%;          /* flex-grow, flex-shrink, flex-basis */
+  min-width: 200px;       /* largeur mini pour que ça reste lisible */
+}
+
+/* 3) Le bouton de submit et clear à droite ou en baseline */
+form.restaurant-filter .filter-field:last-child {
+  flex: 1 1 100%;         /* occupe toute la ligne sur mobile/tablette */
+  display: flex;
+  gap: .5rem;
+}
+form.restaurant-filter .btn-filter,
+form.restaurant-filter .btn-clear-filters {
+  flex: 1;
+}
+
+/* 4) Responsivité (par exemple sous 600px, plein écran) */
+@media (max-width: 600px) {
+  form.restaurant-filter {
+    flex-direction: column;
+  }
+  form.restaurant-filter .filter-field {
+    flex: 1 1 100%;
+  }
+}
+
