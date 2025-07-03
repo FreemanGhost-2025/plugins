@@ -180,6 +180,10 @@ p.restaurant-type  {
   margin-right: 4px;
 }
 
+.hopitaux-specialite {
+    display: flex;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .restaurant-filter {
