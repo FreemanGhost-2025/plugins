@@ -240,11 +240,11 @@ form.restaurant-filter .filter-field:not(.filter-buttons) {
 
 /* 3) Le groupe de checkbox */
 form.restaurant-filter .filter-field--checkboxes {
-  flex: 1 1 100%;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;       /* autorise le retour à la ligne si vraiment il n’y a plus assez de place */
+  gap: 0.5rem 1rem;      /* un petit espace entre chaque case */
   align-items: center;
-  gap: .5rem 1rem;
+  margin-bottom: 1rem;
 }
 form.restaurant-filter .filter-field--checkboxes .filter-label {
   flex: 0 0 100%;
@@ -270,6 +270,20 @@ form.restaurant-filter .btn-clear-filters {
   color: #2f855a;
   text-decoration: none;
 }
+
+form.restaurant-filter .filter-field--checkboxes .filter-checkbox {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 1rem;
+  white-space: nowrap;   /* empêche le label de sauter sur 2 lignes */
+}
+
+/* Le texte du label juste à côté de la checkbox */
+form.restaurant-filter .filter-field--checkboxes .filter-checkbox input {
+  margin-right: .25rem;
+}
+
+
 
 /* 5) Responsivité mobile */
 @media (max-width: 600px) {
