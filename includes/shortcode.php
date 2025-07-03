@@ -55,6 +55,8 @@ function rl_afficher_liste( $atts ) {
 
    // 4) Affichage du formulaire
               // 4) Affichage du formulaire
+              echo '<!-- debug term='.$term.' keys='.implode(',',array_keys($filtres_config[$post_type])).' -->';
+
                 echo '<form method="GET" action="' . esc_url( $current_url ) . '" class="restaurant-filter">';
 
                 foreach ( $to_show as $f ) {
