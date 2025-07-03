@@ -228,7 +228,7 @@ function rl_afficher_liste( $atts ) {
                     echo '</p>';
                   }
                   if ( is_array( $spe ) && ! empty( $spe ) ) {
-                    echo '<p class="restaurant-populaire"><strong>Populaire pour :</strong> ';
+                    echo '<p class="restaurant-populaire"><strong>Spécialité :</strong> ';
                     foreach ( $spe as $val ) {
                         echo '<span>'. esc_html( $val ) .'</span> ';
                     }
