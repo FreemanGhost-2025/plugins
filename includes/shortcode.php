@@ -16,39 +16,32 @@ function rl_afficher_liste( $atts ) {
     // 2) Config des filtres, par CPT ET par term (slug de category)
     $filtres_config = [
         'test' => [
-            // configuration spécifique pour term = "maquis"
             'maquis' => [
-                [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
-                [ 'name'=>'budget_moyen',         'placeholder'=>'Budget moyen',        'type'=>'number' ],
-                [ 'name'=>'populaire_pour',       'placeholder'=>'Populaire pour',      'type'=>'checkbox' ],
+                [ 'name'=>'avis',           'placeholder'=>'Avis',           'type'=>'text'   ],
+                [ 'name'=>'budget_moyen',   'placeholder'=>'Budget moyen',   'type'=>'number' ],
+                [ 'name'=>'populaire_pour', 'placeholder'=>'Populaire pour', 'type'=>'checkbox' ],
             ],
-            // configuration spécifique pour term = "snack"
             'street-food' => [
-                [ 'name'=>'type_de_restauration', 'placeholder'=>'Type de restauration', 'type'=>'text' ],
-                [ 'name'=>'populaire_pour',       'placeholder'=>'Populaire pour',      'type'=>'checkbox' ],
+                [ 'name'=>'type_de_restauration','placeholder'=>'Type de restauration','type'=>'text'   ],
+                [ 'name'=>'populaire_pour',      'placeholder'=>'Populaire pour',      'type'=>'checkbox' ],
             ],
             'hopitaux' => [
-                [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
-                [ 'name'=>'specialite',       'placeholder'=>'Spécialité',      'type'=>'checkbox' ],
+                [ 'name'=>'avis',         'placeholder'=>'Avis',         'type'=>'text'   ],
+                [ 'name'=>'specialite',   'placeholder'=>'Spécialité',   'type'=>'checkbox' ],
             ],
             'pharmacies' => [
-                [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
-                [ 'name'=>'services',       'placeholder'=>'Services disponibles',      'type'=>'checkbox' ],
-                [ 'name'=>'populaire_pour',       'placeholder'=>'Populaire pour',      'type'=>'checkbox' ],
+                [ 'name'=>'avis',           'placeholder'=>'Avis',                 'type'=>'text'     ],
+                [ 'name'=>'services',       'placeholder'=>'Services disponibles',  'type'=>'checkbox' ],
+                [ 'name'=>'populaire_pour', 'placeholder'=>'Populaire pour',       'type'=>'checkbox' ],
             ],
-             'plages-et-piscines' => [
-                [ 'name'=>'entree',       'placeholder'=>'Gratuit ou payant',      'type'=>'checkbox' ],
-                
+            'plages-et-piscines' => [
+                [ 'name'=>'entree', 'placeholder'=>'Gratuit ou payant', 'type'=>'checkbox' ],
             ],
-            // fallback générique si $term ne matche pas
             'default' => [
-                [ 'name'=>'avis',                 'placeholder'=>'Avis',                 'type'=>'text'   ],
-                
+                [ 'name'=>'avis', 'placeholder'=>'Avis', 'type'=>'text' ],
             ],
         ],
     ];
-// DEBUG — affiche dans le HTML (ou dans error_log si tu préfères)
-// echo '<pre>Term passé : '. esc_html($term) ."\nClés dispo : ". esc_html( implode(', ', array_keys($filtres_config[$post_type])) ) .'</pre>';
 
     // 3) Choix des filtres à afficher selon le CPT et la catégorie
     $to_show = [];
@@ -66,13 +59,13 @@ function rl_afficher_liste( $atts ) {
         $name = $f['name'];
         $val  = $_GET[ $name ] ?? '';
 
-                if ( $f['type'] === 'checkbox' ) {
+        if ( $f['type'] === 'checkbox' ) {
             // on récupère directement la configuration ACF du champ
             $field = get_field_object( $name );
             if ( ! empty( $field['choices'] ) && is_array( $field['choices'] ) ) {
                 echo '<div class="filter-field">';
                 echo '<span class="filter-label">'. esc_html( $f['placeholder'] ) .'</span>';
-                $selected = (array) ( $_GET[ $name ] ?? [] );
+                $selected = (array) $val;
                 foreach ( $field['choices'] as $value => $label ) {
                     $checked = in_array( $value, $selected, true ) ? ' checked' : '';
                     printf(
@@ -86,25 +79,24 @@ function rl_afficher_liste( $atts ) {
                 echo '</div>';
             }
             continue;
-            }
-        } else {
-            // champ texte / nombre
-            $attrs = '';
-            if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
-            if ( isset( $f['max'] ) ) $attrs .= ' max="'. intval( $f['max'] ) .'"';
-            printf(
-                '<div class="filter-field">'
-                . '<span class="filter-label sr-only">%4$s</span>'
-                . '<input type="%1$s" name="%2$s" placeholder="%3$s" value="%5$s"%6$s />'
-                . '</div>',
-                esc_attr( $f['type'] ),
-                esc_attr( $name ),
-                esc_attr( $f['placeholder'] ),
-                esc_html( $f['placeholder'] ),
-                esc_attr( $val ),
-                $attrs
-            );
         }
+
+        // champ texte / nombre
+        $attrs = '';
+        if ( isset( $f['min'] ) ) $attrs .= ' min="'. intval( $f['min'] ) .'"';
+        if ( isset( $f['max'] ) ) $attrs .= ' max="'. intval( $f['max'] ) .'"';
+        printf(
+            '<div class="filter-field">'
+          .  '<span class="filter-label sr-only">%4$s</span>'
+          .  '<input type="%1$s" name="%2$s" placeholder="%3$s" value="%5$s"%6$s />'
+          .  '</div>',
+            esc_attr( $f['type'] ),
+            esc_attr( $name ),
+            esc_attr( $f['placeholder'] ),
+            esc_html( $f['placeholder'] ),
+            esc_attr( $val ),
+            $attrs
+        );
     }
     echo '<div class="filter-field">';
       echo '<button type="submit" class="btn-filter">Filtrer</button>';
@@ -113,92 +105,81 @@ function rl_afficher_liste( $atts ) {
     echo '</form>';
 
     // 5) Construction de la meta_query
-            $meta_query = [ 'relation' => 'AND' ];
+    $meta_query = [ 'relation' => 'AND' ];
+    foreach ( $to_show as $f ) {
+        $name  = $f['name'];
+        $value = $_GET[ $name ] ?? null;
 
-            foreach ( $to_show as $f ) {
-                $name = $f['name'];
-                $value = $_GET[ $name ] ?? null;
-
-                if ( $value === null || $value === '' ) {
-                    // pas de filtre soumis pour ce champ
-                    continue;
-                }
-
-                switch ( $f['type'] ) {
-                    case 'text':
-                        // recherche partielle
-                        $meta_query[] = [
+        if ( $value === null || $value === '' ) {
+            continue;
+        }
+        switch ( $f['type'] ) {
+            case 'text':
+                $meta_query[] = [
+                    'key'     => $name,
+                    'value'   => sanitize_text_field( $value ),
+                    'compare' => 'LIKE',
+                ];
+                break;
+            case 'number':
+                $meta_query[] = [
+                    'key'     => $name,
+                    'value'   => intval( $value ),
+                    'type'    => 'NUMERIC',
+                    'compare' => '<=',
+                ];
+                break;
+            case 'checkbox':
+                if ( is_array( $value ) ) {
+                    $or = [ 'relation' => 'OR' ];
+                    foreach ( $value as $v ) {
+                        $or[] = [
                             'key'     => $name,
-                            'value'   => sanitize_text_field( $value ),
+                            'value'   => '"' . sanitize_text_field( $v ) . '"',
                             'compare' => 'LIKE',
                         ];
-                        break;
-
-                    case 'number':
-                        // on suppose un <=
-                        $meta_query[] = [
-                            'key'     => $name,
-                            'value'   => intval( $value ),
-                            'type'    => 'NUMERIC',
-                            'compare' => '<=',
-                        ];
-                        break;
-
-                    case 'checkbox':
-                        // on gère un tableau de choix multiples
-                        if ( is_array( $value ) ) {
-                            $or = [ 'relation' => 'OR' ];
-                            foreach ( $value as $v ) {
-                                $or[] = [
-                                    'key'     => $name,
-                                    'value'   => '"' . sanitize_text_field( $v ) . '"',
-                                    'compare' => 'LIKE',
-                                ];
-                            }
-                            $meta_query[] = $or;
-                        }
-                        break;
-
-                    // tu peux ajouter d'autres types ici (radio, select…)
+                    }
+                    $meta_query[] = $or;
                 }
-            }
+                break;
+        }
+    }
+
     // 6) Assemblage de la requête WP_Query
-        $args = [
-            'post_type'      => $post_type,
-            'posts_per_page' => -1,
-        ];
+    $args = [
+        'post_type'      => $post_type,
+        'posts_per_page' => -1,
+    ];
+    if ( count( $meta_query ) > 1 ) {
+        $args['meta_query'] = $meta_query;
+    }
+    if ( $term ) {
+        $args['tax_query'] = [[
+            'taxonomy' => 'category',
+            'field'    => 'slug',
+            'terms'    => $term,
+        ]];
+    }
 
-        if ( count( $meta_query ) > 1 ) {
-            $args['meta_query'] = $meta_query;
-        }
+    $q = new WP_Query( $args );
 
-        if ( $term ) {
-            $args['tax_query'] = [[
-                'taxonomy' => 'category',
-                'field'    => 'slug',
-                'terms'    => $term,
-            ]];
-        }
-
-        $q = new WP_Query( $args );
-
-    // 7) Affichage des résultats (inchangé)
+    // 7) Affichage des résultats
     ob_start();
     if ( $q->have_posts() ) {
         echo '<div class="liste-restaurants">';
         while ( $q->have_posts() ) {
             $q->the_post();
-            $id          = get_the_ID();
-            $img         = get_field( 'images', $id );
-            $avis        = get_field( 'avis', $id );
-            $type        = get_field( 'type_de_restauration', $id );
-            $description = get_field( 'description', $id );
-            $popu        = get_field( 'populaire_pour', $id );
-            $spe        = get_field( 'specialite', $id );
-            $serphar        = get_field( 'services', $id );
-            $budg        = get_field( 'budget_moyen', $id );
-            $link        = get_field( 'reservation', $id );
-            $lien_reservation = get_field('lien_reservation', $id);
+            $id    = get_the_ID();
+            $img   = get_field( 'images', $id );
+            $avis  = get_field( 'avis', $id );
+            $type  = get_field( 'type_de_restauration', $id );
+            $desc  = get_field( 'description', $id );
+            $popu  = get_field( 'populaire_pour', $id );
+            $spe   = get_field( 'specialite', $id );
+            $ser   = get_field( 'services', $id );
+            $budg  = get_field( 'budget_moyen', $id );
+            $link  = get_field( 'reservation', $id );
+            $itin  = get_field( 'lien_reservation', $id );
 
             echo '<div class="restaurant-card">';
               echo '<div class="restaurant-left">';
@@ -209,40 +190,39 @@ function rl_afficher_liste( $atts ) {
                         esc_attr( get_the_title() )
                     );
                 }
-               echo '<div class="restaurant-info">';
-                printf( '<h3 class="restaurant-title">%s</h3>', esc_html( get_the_title() ) );
-                echo '<div class="note">';
+                echo '<div class="restaurant-info">';
+                  printf( '<h3 class="restaurant-title">%s</h3>', esc_html( get_the_title() ) );
+                  echo '<div class="note">';
                     if ( $avis ) echo '<p class="restaurant-etoiles">⭐ '. esc_html( $avis ) .'</p>';
                     if ( $type ) echo '<p class="restaurant-type"><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
+                  echo '</div>';
+
+                  if ( $desc ) echo '<p class="restaurant-description">'. esc_html( $desc ) .'</p>';
+
+                  // Populaire pour
+                  if ( ! empty( $popu ) && is_array( $popu )   && in_array( $term, ['maquis','street-food'], true ) ) {
+                    echo '<p class="restaurant-populaire"><strong>Populaire pour :</strong> '
+                       . implode(', ', array_map('esc_html', $popu))
+                       . '</p>';
+                  }
+
+                  // Spécialité (hopitaux)
+                  if ( ! empty( $spe ) && is_array( $spe ) && $term === 'hopitaux' ) {
+                    echo '<p class="restaurant-specialite"><strong>Spécialité :</strong> '
+                       . implode(', ', array_map('esc_html', $spe))
+                       . '</p>';
+                  }
+
+                  // Services (pharmacies)
+                  if ( ! empty( $ser ) && is_array( $ser ) && $term === 'pharmacies' ) {
+                    echo '<p class="restaurant-services"><strong>Services :</strong> '
+                       . implode(', ', array_map('esc_html', $ser))
+                       . '</p>';
+                  }
+
                 echo '</div>';
-                
-                if ( $description ) {
-                    echo '<p class="restaurant-description">'. esc_html( $description ) .'</p>';
-                }
-
-                // Si on est dans une catégorie qui utilise 'populaire_pour'
-                if ( ! empty($popu) && is_array($popu) && in_array($term, ['maquis','street-food'], true) ) {
-                        echo '<p class="restaurant-populaire"><strong>Populaire pour :</strong> '
-                        . implode(', ', array_map('esc_html',$popu))
-                        . '</p>';
-                    }
-
-                    // Spécialité (hopitaux)
-                    if ( ! empty($spe) && is_array($spe) && $term === 'hopitaux' ) {
-                        echo '<p class="restaurant-specialite"><strong>Spécialité :</strong> '
-                        . implode(', ', array_map('esc_html',$spe))
-                        . '</p>';
-                    }
-
-                    // Services (pharmacies)
-                    if ( ! empty($serphar) && is_array($serphar) && $term === 'pharmacies' ) {
-                        echo '<p class="restaurant-services"><strong>Services :</strong> '
-                        . implode(', ', array_map('esc_html',$serphar))
-                        . '</p>';
-                    }
-            echo '</div>'; // .restaurant-info
-
               echo '</div>';
+
               echo '<div class="restaurant-divider-vertical"></div>';
               echo '<div class="restaurant-right">';
                 if ( $budg ) {
@@ -251,7 +231,6 @@ function rl_afficher_liste( $atts ) {
                 }
                 if ( $link ) {
                     if ( is_array( $link ) ) {
-                        // Champ ACF « Lien » (array)
                         $url    = $link['url']    ?? '';
                         $text   = $link['title']  ?: '';
                         $target = $link['target'] ?: '_self';
@@ -262,15 +241,14 @@ function rl_afficher_liste( $atts ) {
                             esc_html( $text  )
                         );
                     } else {
-                        // Champ ACF « Texte »
                         printf(
                             '<span class="reserve-button">%s</span>',
                             esc_html( $link )
                         );
                     }
                 }
-                if ( $lien_reservation ) {
-                    echo '<a class="reserve-button" href="'. esc_url( $lien_reservation ).'" target="_blank">Itinéraire</a>';
+                if ( $itin ) {
+                    echo '<a class="reserve-button" href="'. esc_url( $itin ).'" target="_blank">Itinéraire</a>';
                 }
               echo '</div>';
             echo '</div>';
