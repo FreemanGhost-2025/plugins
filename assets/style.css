@@ -10,7 +10,7 @@
 }
 .filter-field {
   display: flex;
-  flex-direction: column;
+  
 }
 .filter-label {
   font-size: 14px;
