@@ -222,39 +222,64 @@ p.restaurant-type  {
 }
 
 
-/* 1) Le form prend toute la largeur disponible */
+/* 1) Le formulaire en flex, champs sur la même ligne */
 form.restaurant-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
   width: 100%;
-  box-sizing: border-box; /* pour inclure padding/border dans le 100% */
-  display: flex;
-  flex-wrap: wrap;        /* pour faire descendre les champs si besoin */
-  gap: 1rem;              /* espace entre les champs */
+  margin-bottom: 2rem;
 }
 
-/* 2) Chaque champ occupe une part égale (ici 1/4 de la largeur) */
-form.restaurant-filter .filter-field {
-  flex: 1 1 25%;          /* flex-grow, flex-shrink, flex-basis */
-  min-width: 200px;       /* largeur mini pour que ça reste lisible */
+/* 2) Les champs text/number prennent la place nécessaire */
+form.restaurant-filter .filter-field:not(.filter-buttons) {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
 }
 
-/* 3) Le bouton de submit et clear à droite ou en baseline */
-form.restaurant-filter .filter-field:last-child {
-  flex: 1 1 100%;         /* occupe toute la ligne sur mobile/tablette */
+/* 3) Le groupe de checkbox */
+form.restaurant-filter .filter-field--checkboxes {
+  flex: 1 1 100%;
   display: flex;
-  gap: .5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1rem;
 }
-form.restaurant-filter .btn-filter,
-form.restaurant-filter .btn-clear-filters {
+form.restaurant-filter .filter-field--checkboxes .filter-label {
+  flex: 0 0 100%;
+  margin-bottom: .5rem;
+}
+
+/* 4) Les boutons (submit + clear) en bas, 100% de large */
+form.restaurant-filter .filter-buttons {
+  flex: 1 1 100%;
+  display: flex;
+  gap: 1rem;
+}
+form.restaurant-filter .btn-filter {
   flex: 1;
+  background-color: #2f855a;
+  color: #fff;
+  border: none;
+  padding: .75rem 1rem;
+  text-transform: uppercase;
+}
+form.restaurant-filter .btn-clear-filters {
+  align-self: center;
+  color: #2f855a;
+  text-decoration: none;
 }
 
-/* 4) Responsivité (par exemple sous 600px, plein écran) */
+/* 5) Responsivité mobile */
 @media (max-width: 600px) {
   form.restaurant-filter {
     flex-direction: column;
   }
-  form.restaurant-filter .filter-field {
+  form.restaurant-filter .filter-field,
+  form.restaurant-filter .filter-buttons {
     flex: 1 1 100%;
   }
 }
+
 
