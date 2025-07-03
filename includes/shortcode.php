@@ -32,7 +32,7 @@ function rl_afficher_liste( $atts ) {
             'pharmacies' => [
                 [ 'name'=>'avis',           'placeholder'=>'Avis',                 'type'=>'text'     ],
                 [ 'name'=>'services',       'placeholder'=>'Services disponibles',  'type'=>'checkbox' ],
-                [ 'name'=>'populaire_pour', 'placeholder'=>'Populaire pour',       'type'=>'checkbox' ],
+                
             ],
             'plages-et-piscines' => [
                 [ 'name'=>'entree', 'placeholder'=>'Gratuit ou payant', 'type'=>'checkbox' ],
