@@ -11,6 +11,10 @@ function rl_afficher_liste( $atts ) {
 
     $post_type   = sanitize_key( $atts['type'] );
     $term        = sanitize_key( $atts['term'] );
+    echo '<pre style="background:#f2f2f2;padding:10px;">';
+echo "Term récupéré : {$term}\n";
+echo "Clés dans config : " . implode(', ', array_keys( $filtres_config['test'] ));
+echo '</pre>';
     $current_url = strtok( $_SERVER['REQUEST_URI'], '?' );
 
     // 2) Config des filtres, par CPT ET par term (slug de category)
