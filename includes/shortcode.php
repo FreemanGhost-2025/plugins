@@ -39,8 +39,10 @@ function rl_afficher_liste( $atts ) {
             ],
             'restaurants' => [
                 
-                [ 'name'=>'type_de_cuisine', 'placeholder'=>'Avis', 'type'=>'text' ],
+                [ 'name'=>'avis', 'placeholder'=>'Avis', 'type'=>'text' ],
+                [ 'name'=>'type_de_cuisine', 'placeholder'=>'Type de cuisine', 'type'=>'text' ],
                 [ 'name'=>'budget_moyen',   'placeholder'=>'Budget moyen',   'type'=>'number' ],
+                [ 'name'=>'populaire_pour', 'placeholder'=>'Populaire pour', 'type'=>'checkbox' ],
             ],
             'default' => [
                 [ 'name'=>'avis', 'placeholder'=>'Avis', 'type'=>'text' ],
