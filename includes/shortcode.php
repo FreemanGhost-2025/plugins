@@ -207,6 +207,7 @@ echo '<!-- DEBUG: term='.esc_html($term).' to_show_names='
             $itin  = get_field( 'lien_reservation', $id );
             $type  = get_field('type_de_cuisine', $post_id);
             $telephone      = get_field('numero_de_telephone',    $post_id);
+            $adresse        = get_field('adresse',             $post_id);
 
             echo '<div class="restaurant-card">';
               echo '<div class="restaurant-left">';
@@ -222,6 +223,7 @@ echo '<!-- DEBUG: term='.esc_html($term).' to_show_names='
                   echo '<div class="note">';
                     if ( $avis ) echo '<p class="restaurant-etoiles">⭐ '. esc_html( $avis ) .'</p>';
                     if ( $type ) echo '<p class="restaurant-type"><i class="fa-solid fa-utensils"></i> '. esc_html( $type ) .'</p>';
+                    if ($adresse)  echo '<p class="restaurant-adresse"><i class="fa-solid fa-location-dot"></i> ' . esc_html($adresse). '</p>';
                   echo '</div>';
 
                   if ( $desc ) echo '<p class="restaurant-description">'. esc_html( $desc ) .'</p>';
