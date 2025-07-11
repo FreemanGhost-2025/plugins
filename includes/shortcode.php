@@ -37,6 +37,11 @@ function rl_afficher_liste( $atts ) {
             'plages-et-piscines' => [
                 [ 'name'=>'entrees', 'placeholder'=>'Gratuit ou payant', 'type'=>'checkbox' ],
             ],
+            'restaurants' => [
+                [ 'name'=>'avis', 'placeholder'=>'Avis', 'type'=>'text' ],
+                [ 'name'=>'type_de_cuisine', 'placeholder'=>'Avis', 'type'=>'text' ],
+                [ 'name'=>'budget_moyen',   'placeholder'=>'Budget moyen',   'type'=>'number' ],
+            ],
             'default' => [
                 [ 'name'=>'avis', 'placeholder'=>'Avis', 'type'=>'text' ],
             ],
@@ -200,6 +205,8 @@ echo '<!-- DEBUG: term='.esc_html($term).' to_show_names='
             $budg  = get_field( 'budget_moyen', $id );
             $link  = get_field( 'reservation', $id );
             $itin  = get_field( 'lien_reservation', $id );
+            $type  = get_field('type_de_cuisine', $post_id);
+            $telephone      = get_field('numero_telephone',    $post_id);
 
             echo '<div class="restaurant-card">';
               echo '<div class="restaurant-left">';
@@ -218,6 +225,11 @@ echo '<!-- DEBUG: term='.esc_html($term).' to_show_names='
                   echo '</div>';
 
                   if ( $desc ) echo '<p class="restaurant-description">'. esc_html( $desc ) .'</p>';
+
+                  // Téléphone + étoiles
+                    echo '<div class="restaurant-contact-note">';
+                        if ($telephone) echo '<span class="restaurant-telephone"><i class="fa-solid fa-phone-volume"></i> ' . esc_html($telephone)     . '</span>';
+                    echo '</div>';
 
                   // Populaire pour
                   if ( ! empty( $popu ) && is_array( $popu )   && in_array( $term, ['maquis','street-food'], true ) ) {
