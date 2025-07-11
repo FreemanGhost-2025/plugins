@@ -184,6 +184,49 @@ p.restaurant-type  {
     display: flex;
 }
 
+
+.restaurant-contact-note {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.restaurant-contact-note .restaurant-telephone,
+.restaurant-contact-note .restaurant-etoiles {
+  font-size: 14px;
+  color: #555;
+}
+
+
+.restaurant-contact-note .restaurant-telephone {
+  background-color: #000;
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+.restaurant-contact-note {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.restaurant-type,
+.restaurant-adresse,
+.restaurant-description,
+.restaurant-telephone,
+.restaurant-etoiles {
+  font-size: 14px;
+  color: #555;
+  margin: 4px 0;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .restaurant-filter {
@@ -218,6 +261,12 @@ p.restaurant-type  {
     width: 80%;
     height: 1px;
     margin: 12px auto;
+  }
+
+  .restaurant-contact-note {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 }
 
