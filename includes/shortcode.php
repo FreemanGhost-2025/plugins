@@ -206,7 +206,7 @@ echo '<!-- DEBUG: term='.esc_html($term).' to_show_names='
             $link  = get_field( 'reservation', $id );
             $itin  = get_field( 'lien_reservation', $id );
             $type  = get_field('type_de_cuisine', $post_id);
-            $telephone      = get_field('numero_telephone',    $post_id);
+            $telephone      = get_field('numero_de_telephone',    $post_id);
 
             echo '<div class="restaurant-card">';
               echo '<div class="restaurant-left">';
