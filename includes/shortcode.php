@@ -38,7 +38,7 @@ function rl_afficher_liste( $atts ) {
                 [ 'name'=>'entrees', 'placeholder'=>'Gratuit ou payant', 'type'=>'checkbox' ],
             ],
             'restaurants' => [
-                [ 'name'=>'avis', 'placeholder'=>'Avis', 'type'=>'text' ],
+                
                 [ 'name'=>'type_de_cuisine', 'placeholder'=>'Avis', 'type'=>'text' ],
                 [ 'name'=>'budget_moyen',   'placeholder'=>'Budget moyen',   'type'=>'number' ],
             ],
