@@ -44,6 +44,15 @@ function rl_afficher_liste( $atts ) {
                 [ 'name'=>'budget_moyen',   'placeholder'=>'Budget moyen',   'type'=>'number' ],
                 [ 'name'=>'populaire_pour', 'placeholder'=>'Populaire pour', 'type'=>'checkbox' ],
             ],
+
+            'maquis-porto-novo' => [
+                
+                [ 'name'=>'avis', 'placeholder'=>'Avis', 'type'=>'text' ],
+                [ 'name'=>'type_de_cuisine', 'placeholder'=>'Type de cuisine', 'type'=>'text' ],
+                [ 'name'=>'budget_moyen',   'placeholder'=>'Budget moyen',   'type'=>'number' ],
+                [ 'name'=>'populaire_pour', 'placeholder'=>'Populaire pour', 'type'=>'checkbox' ],
+            ],
+
             'default' => [
                 [ 'name'=>'avis', 'placeholder'=>'Avis', 'type'=>'text' ],
             ],
